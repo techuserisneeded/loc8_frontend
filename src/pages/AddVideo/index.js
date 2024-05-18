@@ -21,6 +21,7 @@ import { addVideosAPI } from "../../apis/videos.apis";
 import { toast } from "react-toastify";
 import Loader from "../../components/Loader";
 import UploadProgress from "./UploadProgress";
+import base_url from "../../constants/base_url";
 
 const defaultStateOptions = [{ value: 0, label: "Please Select Zone" }];
 
@@ -137,7 +138,7 @@ export default function AddVideo() {
 	};
 
 	useEffect(() => {
-		const socketInstance = io("http://localhost:5000");
+		const socketInstance = io(base_url);
 
 		socketInstance.on("connect", () => {
 			console.log("Connected to server");
