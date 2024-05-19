@@ -17,11 +17,12 @@ const MapView = ({ videos = [], onAddToPlan }) => {
 		.map((v) => ({
 			video_id: v.video_id,
 			filename: v.filename,
+			video_path: v.video_path,
 			coords: v.coordinates.map((c) => [c.latitude, c.longitude]),
 		}));
 
-	const handleVideoOpen = (filename) => {
-		const fileurl = base_url + "videos/uploads/" + filename.split(".")[0];
+	const handleVideoOpen = (url) => {
+		const fileurl = url;
 		window.open(fileurl, "_blank");
 	};
 
@@ -66,7 +67,7 @@ const MapView = ({ videos = [], onAddToPlan }) => {
 								<Popup>
 									<List sx={{ padding: 0 }}>
 										<ListItemButton
-											onClick={handleVideoOpen.bind(this, c.filename)}>
+											onClick={handleVideoOpen.bind(this, c.video_path)}>
 											<ListItemText primary="View Video" />
 										</ListItemButton>
 										<ListItemButton

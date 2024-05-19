@@ -71,11 +71,12 @@ const columns = [
 		header: "Tracker Id",
 		enableColumnFilter: false,
 	}),
-	columnHelper.accessor("filename", {
-		cell: (info) => {
-			const filename = info.getValue();
+	columnHelper.accessor("video_path", {
+		cell: (info, d) => {
+			const filename = info?.row?.original?.filename;
+			const video_path = info.getValue();
 
-			const fileurl = base_url + "videos/uploads/" + filename?.split(".")[0];
+			const fileurl = video_path;
 
 			return (
 				<a href={fileurl} target="_blank" rel="noreferrer">
