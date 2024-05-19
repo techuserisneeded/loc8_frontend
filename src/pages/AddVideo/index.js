@@ -158,6 +158,13 @@ export default function AddVideo() {
 			});
 		});
 
+		socketInstance.on("saving_processed_video", (data) => {
+			setprogressState({
+				progress: data.percentage,
+				message: "saving the processed video...",
+			});
+		});
+
 		return () => {
 			if (socketInstance) {
 				socketInstance.disconnect();
