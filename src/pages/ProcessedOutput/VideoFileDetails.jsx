@@ -11,8 +11,7 @@ import Paper from "@mui/material/Paper";
 import base_url from "../../constants/base_url";
 
 export default function VideoFileDetails({ data }) {
-	const fileurl = data.video_path;
-
+	const fileurl = base_url + "videos/uploads/" + data?.filename;
 	return (
 		<TableContainer component={Paper}>
 			<Table size="small">
