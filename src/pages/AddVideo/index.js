@@ -22,10 +22,13 @@ import { toast } from "react-toastify";
 import Loader from "../../components/Loader";
 import UploadProgress from "./UploadProgress";
 import base_url from "../../constants/base_url";
+import * as helpers from "../../utils/helper.utils";
 
 const defaultStateOptions = [{ value: 0, label: "Please Select Zone" }];
 
 const defaultCityOptions = [{ value: 0, label: "Please Select State" }];
+
+const roomId = helpers.generateRandomUniqueString();
 
 export default function AddVideo() {
 	const [isUploading, setisUploading] = useState(false);
@@ -35,6 +38,9 @@ export default function AddVideo() {
 		city_id: null,
 		file: null,
 	});
+
+	// const [roomId, setroomId] = useState("");
+
 	const [progressState, setprogressState] = useState({
 		message: "Uploading Video..",
 		progress: -1,
@@ -113,10 +119,13 @@ export default function AddVideo() {
 			return;
 		}
 
+		// const rId = helpers.generateRandomUniqueString();
+
 		data.append("video", selectedData.file);
 		data.append("zone_id", selectedData.zone_id);
 		data.append("state_id", selectedData.state_id);
 		data.append("city_id", selectedData.city_id);
+		data.append("room_id", roomId);
 
 		setisUploading(true);
 
@@ -143,6 +152,8 @@ export default function AddVideo() {
 		socketInstance.on("connect", () => {
 			console.log("Connected to server");
 		});
+
+		socketInstance.emit("join", { room: roomId });
 
 		socketInstance.on("processing_progress", (data) => {
 			setprogressState({
