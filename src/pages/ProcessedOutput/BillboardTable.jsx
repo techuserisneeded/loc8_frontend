@@ -11,11 +11,15 @@ import Checkbox from "@mui/material/Checkbox";
 
 import Loader from "../../components/Loader";
 
-import { mergeBillboardsAPI } from "../../apis/videos.apis";
+import {
+	mergeBillboardsAPI,
+	deleteBillboardsAPI,
+	deleteVideosAPI,
+} from "../../apis/videos.apis";
 import { Button } from "@mui/material";
 import { toast } from "react-toastify";
 
-export default function BillboardTable({ data, onMerge }) {
+export default function BillboardTable({ data, onMerge, videoId }) {
 	const [selectedBills, setSelectedBills] = useState([]);
 	const [isLoading, setisLoading] = useState(false);
 
@@ -59,6 +63,56 @@ export default function BillboardTable({ data, onMerge }) {
 			});
 	};
 
+	const handleDelete = () => {
+		if (
+			!window.confirm(
+				"Are you sure you want to delete the selected billboards?"
+			)
+		) {
+			return;
+		}
+
+		setisLoading(true);
+		deleteBillboardsAPI(selectedBills)
+			.then((v) => {
+				toast.success("selected billboards deleted Successfully!!");
+				onMerge?.();
+				setSelectedBills([]);
+			})
+			.catch((e) => {
+				console.log(e);
+				toast.error("Something went wrong!");
+			})
+			.finally((v) => {
+				setisLoading(false);
+			});
+	};
+
+	const handleDiscardVideo = () => {
+		if (
+			!window.confirm(
+				"Are you sure you want to delete this video and its associated data? \nThis action is irreversible."
+			)
+		) {
+			return;
+		}
+
+		setisLoading(true);
+		deleteVideosAPI(videoId)
+			.then((v) => {
+				toast.success("selected billboards deleted Successfully!!");
+				onMerge?.();
+				setSelectedBills([]);
+			})
+			.catch((e) => {
+				console.log(e);
+				toast.error("Something went wrong!");
+			})
+			.finally((v) => {
+				setisLoading(false);
+			});
+	};
+
 	return (
 		<TableContainer component={Paper}>
 			<Button
@@ -69,6 +123,23 @@ export default function BillboardTable({ data, onMerge }) {
 				onClick={handleMerge}
 				disabled={selectedBills.length < 2}>
 				Merge Selected
+			</Button>
+			<Button
+				variant="contained"
+				size="small"
+				disableElevation
+				sx={{ margin: "15px" }}
+				onClick={handleDelete}
+				disabled={selectedBills.length < 1}>
+				Delete Selected
+			</Button>
+			<Button
+				variant="contained"
+				size="small"
+				disableElevation
+				sx={{ margin: "15px", backgroundColor: "red", color: "white" }}
+				onClick={handleDiscardVideo}>
+				Discard Video
 			</Button>
 			<Table size="small">
 				<TableHead>

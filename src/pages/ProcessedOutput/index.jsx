@@ -44,7 +44,11 @@ const ProcessedOutput = () => {
 					<Typography my={2} variant="h6" mb={1}>
 						Detected Billboards
 					</Typography>
-					<BillboardTable data={data.billboards} onMerge={handleMerge} />
+					<BillboardTable
+						data={data.billboards || []}
+						onMerge={handleMerge}
+						videoId={data?.video_details?.video_id}
+					/>
 
 					<Typography my={2} variant="h6" mb={1}>
 						Detected Coordinates

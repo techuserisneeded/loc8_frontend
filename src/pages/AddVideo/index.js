@@ -156,23 +156,10 @@ export default function AddVideo() {
 		socketInstance.emit("join", { room: roomId });
 
 		socketInstance.on("processing_progress", (data) => {
+			console.log(data);
 			setprogressState({
 				progress: data.percentage,
-				message: "processing...",
-			});
-		});
-
-		socketInstance.on("compress_progress", (data) => {
-			setprogressState({
-				progress: data.percentage,
-				message: "compressing...",
-			});
-		});
-
-		socketInstance.on("saving_processed_video", (data) => {
-			setprogressState({
-				progress: data.percentage,
-				message: "saving the processed video...",
+				message: data.message,
 			});
 		});
 

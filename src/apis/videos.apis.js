@@ -14,11 +14,44 @@ export async function addVideosAPI(fd) {
 	return data;
 }
 
+export async function deleteVideosAPI(video_id) {
+	const token = loginUtils.getUser().token;
+
+	const { data } = await axios.delete(
+		"videos/videos/" + encodeURIComponent(video_id),
+		{
+			headers: {
+				Authorization: token,
+			},
+		}
+	);
+
+	return data;
+}
+
 export async function mergeBillboardsAPI(billboard_ids = []) {
 	const token = loginUtils.getUser().token;
 
 	const { data } = await axios.post(
 		"videos/billboards/merge",
+		{
+			billboard_ids,
+		},
+		{
+			headers: {
+				Authorization: token,
+			},
+		}
+	);
+
+	return data;
+}
+
+export async function deleteBillboardsAPI(billboard_ids = []) {
+	const token = loginUtils.getUser().token;
+
+	const { data } = await axios.post(
+		"videos/billboards/delete",
 		{
 			billboard_ids,
 		},
