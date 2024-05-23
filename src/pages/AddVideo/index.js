@@ -30,6 +30,8 @@ const defaultCityOptions = [{ value: 0, label: "Please Select State" }];
 
 const roomId = helpers.generateRandomUniqueString();
 
+console.log({ roomId });
+
 export default function AddVideo() {
 	const [isUploading, setisUploading] = useState(false);
 	const [selectedData, setselectedData] = useState({

@@ -100,7 +100,7 @@ export default function BillboardTable({ data, onMerge, videoId }) {
 		setisLoading(true);
 		deleteVideosAPI(videoId)
 			.then((v) => {
-				toast.success("selected billboards deleted Successfully!!");
+				toast.success("Video discarded Successfully!!");
 				onMerge?.();
 				setSelectedBills([]);
 			})
