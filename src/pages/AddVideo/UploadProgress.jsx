@@ -18,7 +18,10 @@ export default function UploadProgress({
 
 	return (
 		<Dialog open={isLoading} onClose={handleClose}>
-			<DialogContent>
+			<DialogContent
+				style={{
+					width: "350px",
+				}}>
 				<DialogContentText>
 					{progress < 0 ? (
 						<Box
@@ -33,7 +36,15 @@ export default function UploadProgress({
 						</Box>
 					) : (
 						<center>
-							<Box sx={{ position: "relative", display: "inline-flex" }}>
+							<Typography variant="h6">
+								{message ? message : "Processing..."}
+							</Typography>
+							<Box
+								sx={{
+									position: "relative",
+									display: "inline-flex",
+									marginTop: 3,
+								}}>
 								<CircularProgress
 									variant="determinate"
 									size={150}
@@ -58,9 +69,13 @@ export default function UploadProgress({
 									</Typography>
 								</Box>
 							</Box>
-							<Typography variant="h6">
-								{message ? message : "Processing..."}
-							</Typography>
+							<Box>
+								<img
+									src="/location_pin_loading.gif"
+									alt="loading..."
+									width={100}
+								/>
+							</Box>
 						</center>
 					)}
 				</DialogContentText>

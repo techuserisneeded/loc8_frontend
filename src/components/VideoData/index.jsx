@@ -1,10 +1,8 @@
 import React from "react";
 import useSWR from "swr";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 
 import BillboardTable from "./BillboardTable";
 import VideoFileDetails from "./VideoFileDetails";
@@ -53,12 +51,6 @@ const VideoData = ({ disableMerge }) => {
 						Detected Coordinates
 					</Typography>
 					<VideoCoordinatesTable videoCoordinates={data.video_coordinates} />
-
-					<Box mt={4}>
-						<Button LinkComponent={Link} variant="contained" to="/add-video">
-							Done
-						</Button>
-					</Box>
 				</>
 			) : null}
 		</div>

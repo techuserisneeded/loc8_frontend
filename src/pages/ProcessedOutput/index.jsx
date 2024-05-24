@@ -53,7 +53,11 @@ const ProcessedOutput = () => {
 					<Typography my={2} variant="h6" mb={1}>
 						Detected Coordinates
 					</Typography>
-					<VideoCoordinatesTable videoCoordinates={data.video_coordinates} />
+					<VideoCoordinatesTable
+						videoCoordinates={data.video_coordinates}
+						avgSpeed={data.avg_speed_km}
+						stretchedDistance={data.stretched_in_meters}
+					/>
 
 					<Box mt={4}>
 						<Button LinkComponent={Link} variant="contained" to="/add-video">

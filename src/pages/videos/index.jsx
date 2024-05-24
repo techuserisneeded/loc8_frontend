@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import useSWR from "swr";
 import { styled } from "@mui/material/styles";
+import { toast } from "react-toastify";
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -22,6 +23,7 @@ import Checkbox from "@mui/material/Checkbox";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+
 import IconButton from "@mui/material/IconButton";
 import {
 	flexRender,
@@ -48,7 +50,7 @@ import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import SuperAdminLayout from "../../layouts/SuperAdminLayout";
 import DebouncedInput from "../../components/DebouncedInput";
 
-import { getVidoesAPI } from "../../apis/videos.apis";
+import { getVidoesAPI, deleteVideosAPI } from "../../apis/videos.apis";
 import { Stack, TextField } from "@mui/material";
 import ModalContainer from "../../components/ModalContainer";
 import ASearchFilter from "./ASearchFilter";
@@ -58,19 +60,202 @@ const columnHelper = createColumnHelper();
 
 const speedCell = ({ getValue }) => `${getValue()}km/hr`;
 
+// const columns = [
+// 	columnHelper.accessor("id", {
+// 		header: "Billboard Id",
+// 		enableColumnFilter: false,
+// 	}),
+// 	columnHelper.accessor("video_id", {
+// 		header: "Video Id",
+// 		enableColumnFilter: false,
+// 	}),
+// 	columnHelper.accessor("tracker_id", {
+// 		header: "Tracker Id",
+// 		enableColumnFilter: false,
+// 	}),
+// 	columnHelper.accessor("filename", {
+// 		cell: (info) => {
+// 			const filename = info.getValue();
+
+// 			const fileurl = base_url + "videos/uploads/" + filename;
+
+// 			return (
+// 				<a href={fileurl} target="_blank" rel="noreferrer">
+// 					{filename}
+// 				</a>
+// 			);
+// 		},
+// 		header: "Video File name",
+// 		enableColumnFilter: false,
+// 	}),
+// 	columnHelper.accessor("zone_name", {
+// 		header: "Zone Name",
+// 	}),
+// 	columnHelper.accessor("state_name", {
+// 		header: "State Name",
+// 	}),
+// 	columnHelper.accessor("city_name", {
+// 		header: "City Name",
+// 	}),
+// 	columnHelper.accessor("distance_to_center", {
+// 		header: "Distance To Center",
+// 		enableColumnFilter: false,
+// 	}),
+// 	columnHelper.accessor("far_p_distance", {
+// 		header: "Far P Distance",
+// 		enableColumnFilter: false,
+// 	}),
+// 	columnHelper.accessor("far_p_duration", {
+// 		header: "Far P Duration",
+// 		enableColumnFilter: false,
+// 	}),
+// 	columnHelper.accessor("mid_p_distance", {
+// 		header: "Mid P Distance",
+// 		enableColumnFilter: false,
+// 	}),
+// 	columnHelper.accessor("mid_p_duration", {
+// 		header: "Mid P Duration",
+// 		enableColumnFilter: false,
+// 	}),
+// 	columnHelper.accessor("near_p_distance", {
+// 		header: "Near P Distance",
+// 		enableColumnFilter: false,
+// 	}),
+// 	columnHelper.accessor("near_p_duration", {
+// 		header: "Near P Duration",
+// 		enableColumnFilter: false,
+// 	}),
+// 	columnHelper.accessor("visibility_duration", {
+// 		header: "Visibility Duration",
+// 		enableColumnFilter: false,
+// 	}),
+// 	columnHelper.accessor("average_areas", {
+// 		header: "Average Areas",
+// 		enableColumnFilter: false,
+// 	}),
+// 	columnHelper.accessor("central_distance", {
+// 		header: "Central Distance",
+// 		enableColumnFilter: false,
+// 	}),
+// 	columnHelper.accessor("central_duration", {
+// 		header: "Central Duration",
+// 		enableColumnFilter: false,
+// 	}),
+// 	columnHelper.accessor("confidence", {
+// 		header: "Confidence",
+// 		enableColumnFilter: false,
+// 	}),
+// 	columnHelper.accessor("latitude0", {
+// 		header: "latitude 1",
+
+// 		enableColumnFilter: false,
+// 	}),
+// 	columnHelper.accessor("longitude0", {
+// 		header: "longitude 1",
+// 		enableColumnFilter: false,
+// 	}),
+// 	columnHelper.accessor("speed0", {
+// 		header: "speed 1",
+// 		cell: speedCell,
+// 		enableColumnFilter: true,
+// 	}),
+// 	columnHelper.accessor("latitude1", {
+// 		header: "latitude 2",
+// 		enableColumnFilter: false,
+// 	}),
+// 	columnHelper.accessor("longitude1", {
+// 		header: "longitude 2",
+// 		enableColumnFilter: false,
+// 	}),
+// 	columnHelper.accessor("speed1", {
+// 		header: "speed 2",
+// 		cell: speedCell,
+// 		enableColumnFilter: true,
+// 	}),
+// 	columnHelper.accessor("latitude2", {
+// 		header: "latitude 3",
+// 		enableColumnFilter: false,
+// 	}),
+// 	columnHelper.accessor("longitude2", {
+// 		header: "longitude 3",
+// 		enableColumnFilter: false,
+// 	}),
+// 	columnHelper.accessor("speed2", {
+// 		header: "speed 3",
+// 		cell: speedCell,
+// 		enableColumnFilter: true,
+// 	}),
+// 	columnHelper.accessor("latitude3", {
+// 		header: "latitude 4",
+// 		enableColumnFilter: false,
+// 	}),
+// 	columnHelper.accessor("longitude3", {
+// 		header: "longitude 4",
+// 		enableColumnFilter: false,
+// 	}),
+// 	columnHelper.accessor("speed3", {
+// 		header: "speed 4",
+// 		cell: speedCell,
+// 		enableColumnFilter: true,
+// 	}),
+// 	columnHelper.accessor("latitude4", {
+// 		header: "latitude 5",
+// 		enableColumnFilter: false,
+// 	}),
+// 	columnHelper.accessor("longitude4", {
+// 		header: "longitude 5",
+// 		enableColumnFilter: false,
+// 	}),
+// 	columnHelper.accessor("speed4", {
+// 		header: "speed 5",
+// 		cell: speedCell,
+// 		enableColumnFilter: true,
+// 	}),
+// 	columnHelper.accessor("latitude5", {
+// 		header: "latitude 6",
+// 		enableColumnFilter: false,
+// 	}),
+// 	columnHelper.accessor("longitude5", {
+// 		header: "longitude 6",
+// 		enableColumnFilter: false,
+// 	}),
+// 	columnHelper.accessor("speed5", {
+// 		header: "speed 6",
+// 		cell: speedCell,
+// 		enableColumnFilter: true,
+// 	}),
+// 	columnHelper.accessor("created_at", {
+// 		header: "Created At",
+// 		enableColumnFilter: false,
+// 	}),
+// ];
+
 const columns = [
-	columnHelper.accessor("id", {
-		header: "Billboard Id",
+	columnHelper.accessor("select-col", {
+		id: "select_col",
+		header: ({ table }) => (
+			<Checkbox
+				checked={table.getIsAllRowsSelected()}
+				indeterminate={table.getIsSomeRowsSelected()}
+				onChange={table.getToggleAllRowsSelectedHandler()}
+			/>
+		),
+		cell: ({ row }) => (
+			<Checkbox
+				checked={row.getIsSelected()}
+				disabled={!row.getCanSelect()}
+				onChange={row.getToggleSelectedHandler()}
+			/>
+		),
 		enableColumnFilter: false,
+		enableSorting: false,
+		enableGlobalFilter: false,
 	}),
 	columnHelper.accessor("video_id", {
 		header: "Video Id",
 		enableColumnFilter: false,
 	}),
-	columnHelper.accessor("tracker_id", {
-		header: "Tracker Id",
-		enableColumnFilter: false,
-	}),
+
 	columnHelper.accessor("filename", {
 		cell: (info) => {
 			const filename = info.getValue();
@@ -95,135 +280,23 @@ const columns = [
 	columnHelper.accessor("city_name", {
 		header: "City Name",
 	}),
-	columnHelper.accessor("distance_to_center", {
-		header: "Distance To Center",
-		enableColumnFilter: false,
-	}),
-	columnHelper.accessor("far_p_distance", {
-		header: "Far P Distance",
-		enableColumnFilter: false,
-	}),
-	columnHelper.accessor("far_p_duration", {
-		header: "Far P Duration",
-		enableColumnFilter: false,
-	}),
-	columnHelper.accessor("mid_p_distance", {
-		header: "Mid P Distance",
-		enableColumnFilter: false,
-	}),
-	columnHelper.accessor("mid_p_duration", {
-		header: "Mid P Duration",
-		enableColumnFilter: false,
-	}),
-	columnHelper.accessor("near_p_distance", {
-		header: "Near P Distance",
-		enableColumnFilter: false,
-	}),
-	columnHelper.accessor("near_p_duration", {
-		header: "Near P Duration",
-		enableColumnFilter: false,
-	}),
-	columnHelper.accessor("visibility_duration", {
-		header: "Visibility Duration",
-		enableColumnFilter: false,
-	}),
-	columnHelper.accessor("average_areas", {
-		header: "Average Areas",
-		enableColumnFilter: false,
-	}),
-	columnHelper.accessor("central_distance", {
-		header: "Central Distance",
-		enableColumnFilter: false,
-	}),
-	columnHelper.accessor("central_duration", {
-		header: "Central Duration",
-		enableColumnFilter: false,
-	}),
-	columnHelper.accessor("confidence", {
-		header: "Confidence",
-		enableColumnFilter: false,
-	}),
-	columnHelper.accessor("latitude0", {
-		header: "latitude 1",
-
-		enableColumnFilter: false,
-	}),
-	columnHelper.accessor("longitude0", {
-		header: "longitude 1",
-		enableColumnFilter: false,
-	}),
-	columnHelper.accessor("speed0", {
-		header: "speed 1",
-		cell: speedCell,
-		enableColumnFilter: true,
-	}),
-	columnHelper.accessor("latitude1", {
-		header: "latitude 2",
-		enableColumnFilter: false,
-	}),
-	columnHelper.accessor("longitude1", {
-		header: "longitude 2",
-		enableColumnFilter: false,
-	}),
-	columnHelper.accessor("speed1", {
-		header: "speed 2",
-		cell: speedCell,
-		enableColumnFilter: true,
-	}),
-	columnHelper.accessor("latitude2", {
-		header: "latitude 3",
-		enableColumnFilter: false,
-	}),
-	columnHelper.accessor("longitude2", {
-		header: "longitude 3",
-		enableColumnFilter: false,
-	}),
-	columnHelper.accessor("speed2", {
-		header: "speed 3",
-		cell: speedCell,
-		enableColumnFilter: true,
-	}),
-	columnHelper.accessor("latitude3", {
-		header: "latitude 4",
-		enableColumnFilter: false,
-	}),
-	columnHelper.accessor("longitude3", {
-		header: "longitude 4",
-		enableColumnFilter: false,
-	}),
-	columnHelper.accessor("speed3", {
-		header: "speed 4",
-		cell: speedCell,
-		enableColumnFilter: true,
-	}),
-	columnHelper.accessor("latitude4", {
-		header: "latitude 5",
-		enableColumnFilter: false,
-	}),
-	columnHelper.accessor("longitude4", {
-		header: "longitude 5",
-		enableColumnFilter: false,
-	}),
-	columnHelper.accessor("speed4", {
-		header: "speed 5",
-		cell: speedCell,
-		enableColumnFilter: true,
-	}),
-	columnHelper.accessor("latitude5", {
-		header: "latitude 6",
-		enableColumnFilter: false,
-	}),
-	columnHelper.accessor("longitude5", {
-		header: "longitude 6",
-		enableColumnFilter: false,
-	}),
-	columnHelper.accessor("speed5", {
-		header: "speed 6",
-		cell: speedCell,
-		enableColumnFilter: true,
-	}),
 	columnHelper.accessor("created_at", {
 		header: "Created At",
+		enableColumnFilter: false,
+	}),
+	columnHelper.accessor("video_id", {
+		cell: (info) => {
+			const video_id = info.getValue();
+
+			const fileurl = "/add-video/" + video_id + "/processed-output";
+
+			return (
+				<a href={fileurl} target="_blank" rel="noreferrer">
+					View Data
+				</a>
+			);
+		},
+		header: "View Data",
 		enableColumnFilter: false,
 	}),
 ];
@@ -256,12 +329,13 @@ const Videos = () => {
 	const [sorting, setSorting] = useState();
 	const [globalFilter, setGlobalFilter] = useState("");
 	const [columnFilters, setColumnFilters] = useState([]);
+	const [isDeleting, setisDeleting] = useState(false);
 	const [pagination, setPagination] = useState({
 		pageIndex: 0,
 		pageSize: 10,
 	});
 
-	const { isLoading, data } = useSWR("/videos/", getVidoesAPI);
+	const { isLoading, data, mutate } = useSWR("/videos/", getVidoesAPI);
 	const [columnVisibility, setColumnVisibility] = useState({
 		average_areas: false,
 		central_distance: false,
@@ -293,10 +367,11 @@ const Videos = () => {
 		latitude5: false,
 		longitude5: false,
 		speed5: false,
-		created_at: false,
+		created_at: true,
 	});
 
 	const table = useReactTable({
+		getRowId: (row) => row.video_id,
 		data,
 		columns,
 		filterFns: {
@@ -327,6 +402,12 @@ const Videos = () => {
 		debugColumns: true,
 	});
 
+	let selectedVideoIDs = [];
+
+	if (data) {
+		selectedVideoIDs = table.getSelectedRowModel().rows.map((v) => v.id) || [];
+	}
+
 	const toggleColumnDisplayPopUp = () => {
 		setIsColumnDisplayPopUp((prev) => !prev);
 	};
@@ -341,6 +422,33 @@ const Videos = () => {
 
 	const openFilter = () => {
 		setfilterOpen(true);
+	};
+
+	const handleDiscardVideo = async () => {
+		if (
+			!window.confirm(
+				"Are you sure you want to delete this videos and its associated data? \nThis action is irreversible."
+			)
+		) {
+			return;
+		}
+
+		setisDeleting(true);
+
+		Promise.all(selectedVideoIDs.map((videoId) => deleteVideosAPI(videoId)))
+			.then((v) => {
+				toast.success("Video discarded Successfully!!");
+				mutate();
+			})
+			.catch((e) => {
+				console.log(e);
+				toast.error(
+					"Some of the videos couldn't be discarded due to some dependencies!"
+				);
+			})
+			.finally((v) => {
+				setisDeleting(false);
+			});
 	};
 
 	if (!data) {
@@ -410,6 +518,20 @@ const Videos = () => {
 									value={globalFilter ?? ""}
 									onChange={(value) => setGlobalFilter(String(value))}
 								/>
+								<Button
+									variant="contained"
+									size="small"
+									disableElevation
+									sx={{
+										margin: "15px",
+										backgroundColor: "red",
+										color: "white",
+										width: "220px",
+									}}
+									onClick={handleDiscardVideo}
+									disabled={selectedVideoIDs.length === 0}>
+									Discard Video
+								</Button>
 							</Stack>
 							<ClickAwayListener onClickAway={handleTooltipClose}>
 								<div>
@@ -451,30 +573,37 @@ const Videos = () => {
 														primary={`Toggle All`}
 													/>
 												</ListItemButton>
-												{table.getAllLeafColumns().map((column) => {
-													return (
-														<ListItemButton
-															key={column.id}
-															sx={{ flex: "1 1 25%" }}
-															onClick={column.getToggleVisibilityHandler()}
-															dense>
-															<ListItemIcon>
-																<Checkbox
-																	edge="start"
-																	{...{
-																		type: "checkbox",
-																		checked: column.getIsVisible(),
-																		onChange:
-																			column.getToggleVisibilityHandler(),
-																	}}
-																	tabIndex={-1}
-																	disableRipple
+												{table
+													.getAllLeafColumns()
+													.filter((c) => {
+														return c.columnDef.id !== "select_col";
+													})
+													.map((column) => {
+														return (
+															<ListItemButton
+																key={column.id}
+																sx={{ flex: "1 1 25%" }}
+																onClick={column.getToggleVisibilityHandler()}
+																dense>
+																<ListItemIcon>
+																	<Checkbox
+																		edge="start"
+																		{...{
+																			type: "checkbox",
+																			checked: column.getIsVisible(),
+																			onChange:
+																				column.getToggleVisibilityHandler(),
+																		}}
+																		tabIndex={-1}
+																		disableRipple
+																	/>
+																</ListItemIcon>
+																<ListItemText
+																	primary={column.columnDef.header}
 																/>
-															</ListItemIcon>
-															<ListItemText primary={column.columnDef.header} />
-														</ListItemButton>
-													);
-												})}
+															</ListItemButton>
+														);
+													})}
 											</List>
 										}>
 										<Button
