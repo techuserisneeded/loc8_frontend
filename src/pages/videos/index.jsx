@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import useSWR from "swr";
 import { styled } from "@mui/material/styles";
 import { toast } from "react-toastify";
+import moment from "moment/moment";
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -283,6 +284,38 @@ const columns = [
 	columnHelper.accessor("created_at", {
 		header: "Created At",
 		enableColumnFilter: false,
+		cell: (info) => {
+			const date_created = info.getValue();
+
+			const parsedTimestamp = moment.utc(
+				date_created,
+				"ddd, DD MMM YYYY HH:mm:ss [GMT]"
+			);
+
+			const localTimestamp = parsedTimestamp
+				.local()
+				.format("ddd, DD MMM YYYY HH:mm:ss");
+
+			return localTimestamp;
+		},
+		sortingFn: (rowA, rowB, columnId) => {
+			const dateA = moment(
+				rowA.original[columnId],
+				"ddd, DD MMM YYYY HH:mm:ss [GMT]"
+			);
+			const dateB = moment(
+				rowB.original[columnId],
+				"ddd, DD MMM YYYY HH:mm:ss [GMT]"
+			);
+
+			if (dateA.isBefore(dateB)) {
+				return -1;
+			} else if (dateA.isAfter(dateB)) {
+				return 1;
+			} else {
+				return 0;
+			}
+		},
 	}),
 	columnHelper.accessor("video_id", {
 		cell: (info) => {

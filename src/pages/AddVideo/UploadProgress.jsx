@@ -23,22 +23,11 @@ export default function UploadProgress({
 					width: "350px",
 				}}>
 				<DialogContentText>
-					{progress < 0 ? (
-						<Box
-							display={"flex"}
-							justifyContent={"center"}
-							alignItems={"center"}
-							gap={2}>
-							<CircularProgress size={22} />
-							<Typography variant="h6">
-								{message ? message : "Uploading Video..."}
-							</Typography>
-						</Box>
-					) : (
-						<center>
-							<Typography variant="h6">
-								{message ? message : "Processing..."}
-							</Typography>
+					<center>
+						<Typography variant="h6">
+							{message ? message : "Processing..."}
+						</Typography>
+						{progress > 0 ? (
 							<Box
 								sx={{
 									position: "relative",
@@ -69,15 +58,15 @@ export default function UploadProgress({
 									</Typography>
 								</Box>
 							</Box>
-							<Box>
-								<img
-									src="/location_pin_loading.gif"
-									alt="loading..."
-									width={100}
-								/>
-							</Box>
-						</center>
-					)}
+						) : null}
+						<Box>
+							<img
+								src="/location_pin_loading.gif"
+								alt="loading..."
+								width={100}
+							/>
+						</Box>
+					</center>
 				</DialogContentText>
 			</DialogContent>
 		</Dialog>
