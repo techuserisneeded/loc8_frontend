@@ -141,6 +141,7 @@ export default function AddVideo() {
 			})
 			.catch((v) => {
 				console.log(v);
+				setprogressState({ progress: -1 });
 				toast.error("Something went wrong!");
 			})
 			.finally(() => {
@@ -152,10 +153,9 @@ export default function AddVideo() {
 		const socketInstance = io(base_url);
 
 		socketInstance.on("connect", () => {
+			socketInstance.emit("join", { room: roomId });
 			console.log("Connected to server");
 		});
-
-		socketInstance.emit("join", { room: roomId });
 
 		socketInstance.on("processing_progress", (data) => {
 			console.log(data);
