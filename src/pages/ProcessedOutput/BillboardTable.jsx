@@ -19,7 +19,12 @@ import {
 import { Button } from "@mui/material";
 import { toast } from "react-toastify";
 
-export default function BillboardTable({ data, onMerge, videoId }) {
+export default function BillboardTable({
+	data,
+	onMerge,
+	videoId,
+	isAuthorized,
+}) {
 	const [selectedBills, setSelectedBills] = useState([]);
 	const [isLoading, setisLoading] = useState(false);
 
@@ -115,32 +120,36 @@ export default function BillboardTable({ data, onMerge, videoId }) {
 
 	return (
 		<TableContainer component={Paper}>
-			<Button
-				variant="contained"
-				size="small"
-				disableElevation
-				sx={{ margin: "15px" }}
-				onClick={handleMerge}
-				disabled={selectedBills.length < 2}>
-				Merge Selected
-			</Button>
-			<Button
-				variant="contained"
-				size="small"
-				disableElevation
-				sx={{ margin: "15px" }}
-				onClick={handleDelete}
-				disabled={selectedBills.length < 1}>
-				Delete Selected
-			</Button>
-			<Button
-				variant="contained"
-				size="small"
-				disableElevation
-				sx={{ margin: "15px", backgroundColor: "red", color: "white" }}
-				onClick={handleDiscardVideo}>
-				Discard Video
-			</Button>
+			{isAuthorized ? (
+				<>
+					<Button
+						variant="contained"
+						size="small"
+						disableElevation
+						sx={{ margin: "15px" }}
+						onClick={handleMerge}
+						disabled={selectedBills.length < 2}>
+						Merge Selected
+					</Button>
+					<Button
+						variant="contained"
+						size="small"
+						disableElevation
+						sx={{ margin: "15px" }}
+						onClick={handleDelete}
+						disabled={selectedBills.length < 1}>
+						Delete Selected
+					</Button>
+					<Button
+						variant="contained"
+						size="small"
+						disableElevation
+						sx={{ margin: "15px", backgroundColor: "red", color: "white" }}
+						onClick={handleDiscardVideo}>
+						Discard Video
+					</Button>
+				</>
+			) : null}
 			<Table size="small">
 				<TableHead>
 					<TableRow>

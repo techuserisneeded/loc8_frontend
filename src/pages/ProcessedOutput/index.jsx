@@ -12,13 +12,20 @@ import VideoFileDetails from "./VideoFileDetails";
 import VideoCoordinatesTable from "./VideoCoordiatesTable";
 
 import { getProcessedOutputAPI } from "../../apis/videos.apis";
+import roles from "../../constants/roles";
+import useAuth from "../../hooks/useAuth";
 
 const ProcessedOutput = () => {
 	const { video_id } = useParams();
 
+	const { user_id, role_id } = useAuth();
+
 	const { data, isLoading, mutate } = useSWR("/videos/output" + video_id, () =>
 		getProcessedOutputAPI(video_id)
 	);
+
+	const isAuthorizedForActions =
+		role_id === roles.SUPERADMIN || data?.created_by_user_id === user_id;
 
 	const handleMerge = () => {
 		mutate();
@@ -48,6 +55,7 @@ const ProcessedOutput = () => {
 						data={data.billboards || []}
 						onMerge={handleMerge}
 						videoId={data?.video_details?.video_id}
+						isAuthorized={isAuthorizedForActions}
 					/>
 
 					<Typography my={2} variant="h6" mb={1}>
