@@ -10,12 +10,20 @@ import base_url from "../../../constants/base_url";
 const defaultCenter = [51.505, -0.09];
 const defaultZoom = 13;
 
+const getColorBasedOnSpeed = (currentSpeed) => {
+	if (currentSpeed >= 0 && currentSpeed < 20) {
+		return "red";
+	} else if (currentSpeed >= 20 && currentSpeed < 40) {
+		return "orange";
+	} else if (currentSpeed >= 40 && currentSpeed < 60) {
+		return "yellow";
+	} else {
+		return "green";
+	}
+};
+
 const MapView = ({ videos = [], onAddToPlan }) => {
 	const mapRef = useRef(null);
-
-	const getColorBasedOnSpeed = (currentSpeed, avgSpeed) => {
-		return currentSpeed > avgSpeed ? "yellow" : "red";
-	};
 
 	const lines = useMemo(() => {
 		return videos
@@ -72,7 +80,7 @@ const MapView = ({ videos = [], onAddToPlan }) => {
 						const segments = [];
 						for (let i = 1; i < line.coords.length; i++) {
 							const segment = [line.coords[i - 1], line.coords[i]];
-							const color = getColorBasedOnSpeed(line.speeds[i], avgSpeed);
+							const color = getColorBasedOnSpeed(line.speeds[i]);
 							segments.push({ segment, color });
 						}
 						return segments.map((seg, index) => (
