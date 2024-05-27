@@ -32,7 +32,7 @@ const MapView = ({ videos = [], onAddToPlan }) => {
 				video_id: v.video_id,
 				filename: v.filename,
 				coords: v.coordinates.map((c) => [c.latitude, c.longitude]),
-				speeds: v.coordinates.map((c) => c.speed), // Assuming speed is part of the coordinates
+				speeds: v.coordinates.map((c) => c.speed),
 			}));
 	}, [videos]);
 
