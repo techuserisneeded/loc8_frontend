@@ -77,20 +77,15 @@ const MapView = ({ videos = [], onAddToPlan }) => {
 						const avgSpeed =
 							line.speeds.reduce((acc, speed) => acc + speed, 0) /
 							line.speeds.length;
-						const segments = [];
-						for (let i = 1; i < line.coords.length; i++) {
-							const segment = [line.coords[i - 1], line.coords[i]];
-							const color = getColorBasedOnSpeed(line.speeds[i]);
-							segments.push({ segment, color });
-						}
-						return segments.map((seg, index) => (
+
+						return (
 							<Polyline
-								key={`${line.video_id}-${index}`}
+								key={`${line.video_id}`}
 								pathOptions={{
-									color: seg.color,
+									color: getColorBasedOnSpeed(avgSpeed),
 									weight: 10,
 								}}
-								positions={seg.segment}>
+								positions={line.coords}>
 								<Popup>
 									<List sx={{ padding: 0 }}>
 										<ListItemButton
@@ -110,7 +105,7 @@ const MapView = ({ videos = [], onAddToPlan }) => {
 									</List>
 								</Popup>
 							</Polyline>
-						));
+						);
 					})}
 			</MapContainer>
 		</div>
