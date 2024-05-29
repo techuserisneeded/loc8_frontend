@@ -53,7 +53,6 @@ import DebouncedInput from "../../components/DebouncedInput";
 
 import { getVidoesAPI, deleteVideosAPI } from "../../apis/videos.apis";
 import { Stack, TextField } from "@mui/material";
-import ModalContainer from "../../components/ModalContainer";
 import ASearchFilter from "./ASearchFilter";
 import base_url from "../../constants/base_url";
 
@@ -100,51 +99,39 @@ const columns = [
 	}),
 	columnHelper.accessor("distance_to_center", {
 		header: "Distance To Center",
-		enableColumnFilter: false,
 	}),
 	columnHelper.accessor("far_p_distance", {
 		header: "Far P Distance",
-		enableColumnFilter: false,
 	}),
 	columnHelper.accessor("far_p_duration", {
 		header: "Far P Duration",
-		enableColumnFilter: false,
 	}),
 	columnHelper.accessor("mid_p_distance", {
 		header: "Mid P Distance",
-		enableColumnFilter: false,
 	}),
 	columnHelper.accessor("mid_p_duration", {
 		header: "Mid P Duration",
-		enableColumnFilter: false,
 	}),
 	columnHelper.accessor("near_p_distance", {
 		header: "Near P Distance",
-		enableColumnFilter: false,
 	}),
 	columnHelper.accessor("near_p_duration", {
 		header: "Near P Duration",
-		enableColumnFilter: false,
 	}),
 	columnHelper.accessor("visibility_duration", {
 		header: "Visibility Duration",
-		enableColumnFilter: false,
 	}),
 	columnHelper.accessor("average_areas", {
 		header: "Average Areas",
-		enableColumnFilter: false,
 	}),
 	columnHelper.accessor("central_distance", {
 		header: "Central Distance",
-		enableColumnFilter: false,
 	}),
 	columnHelper.accessor("central_duration", {
 		header: "Central Duration",
-		enableColumnFilter: false,
 	}),
 	columnHelper.accessor("confidence", {
 		header: "Confidence",
-		enableColumnFilter: false,
 	}),
 	columnHelper.accessor("latitude0", {
 		header: "latitude 1",
@@ -236,7 +223,7 @@ const columns = [
 	columnHelper.accessor("speed6", {
 		header: "speed 7",
 		cell: speedCell,
-		enableColumnFilter: true,
+		enableColumnFilter: false,
 	}),
 	columnHelper.accessor("created_at", {
 		header: "Created At",
@@ -415,44 +402,44 @@ const Videos = () => {
 
 	const { isLoading, data, mutate } = useSWR("/videos/", getVidoesAPI);
 	const [columnVisibility, setColumnVisibility] = useState({
-		average_areas: false,
-		central_distance: false,
-		central_duration: false,
-		confidence: false,
-		far_p_distance: false,
-		far_p_duration: false,
-		mid_p_distance: false,
-		mid_p_duration: false,
-		near_p_distance: false,
-		near_p_duration: false,
-		visibility_duration: false,
-		distance_to_center: false,
-		latitude0: true,
-		longitude0: true,
-		speed0: true,
-		latitude1: true,
-		longitude1: true,
-		speed1: true,
-		latitude2: true,
-		longitude2: true,
-		speed2: true,
-		latitude3: true,
-		longitude3: true,
-		speed3: true,
-		latitude4: true,
-		longitude4: true,
-		speed4: true,
-		latitude5: true,
-		longitude5: true,
-		speed5: true,
-		latitude6: true,
-		longitude6: true,
-		speed6: true,
+		average_areas: true,
+		central_distance: true,
+		central_duration: true,
+		confidence: true,
+		far_p_distance: true,
+		far_p_duration: true,
+		mid_p_distance: true,
+		mid_p_duration: true,
+		near_p_distance: true,
+		near_p_duration: true,
+		visibility_duration: true,
+		distance_to_center: true,
+		latitude0: false,
+		longitude0: false,
+		speed0: false,
+		latitude1: false,
+		longitude1: false,
+		speed1: false,
+		latitude2: false,
+		longitude2: false,
+		speed2: false,
+		latitude3: false,
+		longitude3: false,
+		speed3: false,
+		latitude4: false,
+		longitude4: false,
+		speed4: false,
+		latitude5: false,
+		longitude5: false,
+		speed5: false,
+		latitude6: false,
+		longitude6: false,
+		speed6: false,
 		created_at: true,
 	});
 
 	const table = useReactTable({
-		getRowId: (row) => row.video_id,
+		getRowId: (row) => row.id,
 		data,
 		columns,
 		filterFns: {
