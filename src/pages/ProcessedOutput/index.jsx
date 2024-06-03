@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import useSWR from "swr";
 import { Link, useParams } from "react-router-dom";
 
@@ -10,6 +10,7 @@ import SuperAdminLayout from "../../layouts/SuperAdminLayout";
 import BillboardTable from "./BillboardTable";
 import VideoFileDetails from "./VideoFileDetails";
 import VideoCoordinatesTable from "./VideoCoordiatesTable";
+import AddToPlan from "./AddToPlan";
 
 import { getProcessedOutputAPI } from "../../apis/videos.apis";
 import roles from "../../constants/roles";
@@ -17,6 +18,11 @@ import useAuth from "../../hooks/useAuth";
 
 const ProcessedOutput = () => {
 	const { video_id } = useParams();
+	const [assetInfoState, setAssetInfoState] = useState({
+		isOpen: false,
+		assetId: null,
+		coords: [],
+	});
 
 	const { user_id, role_id } = useAuth();
 
@@ -29,6 +35,28 @@ const ProcessedOutput = () => {
 
 	const handleMerge = () => {
 		mutate();
+	};
+
+	const handleAssetClose = () => {
+		setAssetInfoState({
+			isOpen: false,
+			assetId: null,
+			coords: [],
+			avgSpeed: 0,
+		});
+	};
+
+	const openAssetInfo = (row) => {
+		const avgSpeed =
+			data.video_coordinates.reduce((acc, c) => acc + c.speed, 0) /
+			data.video_coordinates.length;
+
+		setAssetInfoState({
+			isOpen: true,
+			assetId: row.id,
+			coords: data.video_coordinates?.map((v) => [v.latitude, v.longitude]),
+			avgSpeed,
+		});
 	};
 
 	return (
@@ -49,13 +77,14 @@ const ProcessedOutput = () => {
 					<VideoFileDetails data={data.video_details} />
 
 					<Typography my={2} variant="h6" mb={1}>
-						Detected Billboards
+						Detected OOH Assets
 					</Typography>
 					<BillboardTable
 						data={data.billboards || []}
 						onMerge={handleMerge}
 						videoId={data?.video_details?.video_id}
 						isAuthorized={isAuthorizedForActions}
+						onAddAssetInfo={openAssetInfo}
 					/>
 
 					<Typography my={2} variant="h6" mb={1}>
@@ -74,6 +103,14 @@ const ProcessedOutput = () => {
 					</Box>
 				</>
 			) : null}
+
+			<AddToPlan
+				assetId={assetInfoState.assetId}
+				open={assetInfoState.isOpen}
+				onClose={handleAssetClose}
+				initialCoords={assetInfoState.coords}
+				avgSpeed={assetInfoState.avgSpeed}
+			/>
 		</SuperAdminLayout>
 	);
 };

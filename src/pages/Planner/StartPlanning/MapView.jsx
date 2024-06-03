@@ -5,22 +5,12 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import "leaflet/dist/leaflet.css";
 
+import { getColorBasedOnSpeed } from "../../../utils/helper.utils";
+
 import base_url from "../../../constants/base_url";
 
 const defaultCenter = [51.505, -0.09];
 const defaultZoom = 13;
-
-const getColorBasedOnSpeed = (currentSpeed) => {
-	if (currentSpeed >= 0 && currentSpeed < 20) {
-		return "red";
-	} else if (currentSpeed >= 20 && currentSpeed < 40) {
-		return "orange";
-	} else if (currentSpeed >= 40 && currentSpeed < 60) {
-		return "yellow";
-	} else {
-		return "green";
-	}
-};
 
 const MapView = ({ videos = [], onAddToPlan }) => {
 	const mapRef = useRef(null);

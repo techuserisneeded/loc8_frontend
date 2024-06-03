@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -8,6 +9,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Checkbox from "@mui/material/Checkbox";
+import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 
 import Loader from "../../components/Loader";
 
@@ -16,14 +18,14 @@ import {
 	deleteBillboardsAPI,
 	deleteVideosAPI,
 } from "../../apis/videos.apis";
-import { Button } from "@mui/material";
-import { toast } from "react-toastify";
+import { Button, IconButton } from "@mui/material";
 
 export default function BillboardTable({
 	data,
 	onMerge,
 	videoId,
 	isAuthorized,
+	onAddAssetInfo,
 }) {
 	const [selectedBills, setSelectedBills] = useState([]);
 	const [isLoading, setisLoading] = useState(false);
@@ -160,7 +162,8 @@ export default function BillboardTable({
 								checked={selectedBills.length === data.length}
 							/>
 						</TableCell>
-						<TableCell>Billboard ID</TableCell>
+						<TableCell>Asset ID</TableCell>
+						<TableCell>Asset Info</TableCell>
 						<TableCell align="right">Tracker ID</TableCell>
 						<TableCell align="right">Average Areas</TableCell>
 						<TableCell align="right">Visibility Duration</TableCell>
@@ -192,6 +195,16 @@ export default function BillboardTable({
 							</TableCell>
 							<TableCell component="th" scope="row">
 								{row.id}
+							</TableCell>
+							<TableCell component="th" scope="row">
+								<IconButton
+									onClick={onAddAssetInfo.bind(this, row)}
+									size="small"
+									sx={{
+										border: "1px solid #555",
+									}}>
+									<PlaylistAddIcon />
+								</IconButton>
 							</TableCell>
 							<TableCell align="right">{row.tracker_id}</TableCell>
 							<TableCell align="right">{row.average_areas}</TableCell>

@@ -104,3 +104,15 @@ export function generateRandomUniqueString(length = 16) {
 		""
 	);
 }
+
+export const getColorBasedOnSpeed = (currentSpeed) => {
+	if (currentSpeed >= 0 && currentSpeed < 20) {
+		return "red";
+	} else if (currentSpeed >= 20 && currentSpeed < 40) {
+		return "orange";
+	} else if (currentSpeed >= 40 && currentSpeed < 60) {
+		return "yellow";
+	} else {
+		return "green";
+	}
+};
