@@ -18,6 +18,7 @@ import Box from "@mui/material/Box";
 import { Stack, Grid, TextField } from "@mui/material";
 
 import { addPlanAPI } from "../../apis/plans.apis";
+import { addAssetInfoAPI } from "../../apis/videos.apis";
 import { getColorBasedOnSpeed } from "../../utils/helper.utils";
 import Loader from "../../components/Loader";
 
@@ -175,6 +176,8 @@ export default function AddToPlan({
 			latitude: coords.lat,
 			longitude: coords.long,
 			asset_id: assetId,
+			vendor_name: formState.vendor_name,
+			traffic_direction: formState.traffic_direction,
 		};
 
 		const fd = new FormData();
@@ -185,7 +188,7 @@ export default function AddToPlan({
 
 		setisLoading(true);
 
-		addPlanAPI(fd)
+		addAssetInfoAPI(assetId, fd)
 			.then((res) => {
 				toast.success("Plan saved!");
 				setformState({});
@@ -276,6 +279,30 @@ export default function AddToPlan({
 									InputLabelProps={{ shrink: true }}
 								/>
 							</Grid>
+							<Grid item xs={12} sm={6}>
+								<TextField
+									required
+									fullWidth
+									id="vendor_name"
+									label="Vendor Name"
+									name="vendor_name"
+									value={formState.vendor_name}
+									onChange={handleInputChange}
+									InputLabelProps={{ shrink: true }}
+								/>
+							</Grid>
+							<Grid item xs={12} sm={6}>
+								<TextField
+									name="traffic_direction"
+									required
+									fullWidth
+									id="traffic_direction"
+									value={formState.traffic_direction}
+									onChange={handleInputChange}
+									label="Traffic Direction"
+									InputLabelProps={{ shrink: true }}
+								/>
+							</Grid>
 
 							<Grid item xs={12}>
 								<Typography variant="h6">Select Location</Typography>
@@ -355,7 +382,7 @@ export default function AddToPlan({
 									InputLabelProps={{ shrink: true }}
 								/>
 							</Grid>
-							<Grid item xs={12} sm={4}>
+							<Grid item xs={12} sm={3}>
 								<TextField
 									type="number"
 									required
@@ -368,7 +395,7 @@ export default function AddToPlan({
 									InputLabelProps={{ shrink: true }}
 								/>
 							</Grid>
-							<Grid item xs={12} sm={4}>
+							<Grid item xs={12} sm={3}>
 								<TextField
 									type="number"
 									required
@@ -381,7 +408,7 @@ export default function AddToPlan({
 									InputLabelProps={{ shrink: true }}
 								/>
 							</Grid>
-							<Grid item xs={12} sm={4}>
+							{/* <Grid item xs={12} sm={4}>
 								<TextField
 									type="number"
 									required
@@ -393,8 +420,8 @@ export default function AddToPlan({
 									onChange={handleInputChange}
 									InputLabelProps={{ shrink: true }}
 								/>
-							</Grid>
-							<Grid item xs={12} sm={4}>
+							</Grid> */}
+							{/* <Grid item xs={12} sm={4}>
 								<TextField
 									type="number"
 									required
@@ -406,8 +433,8 @@ export default function AddToPlan({
 									onChange={handleInputChange}
 									InputLabelProps={{ shrink: true }}
 								/>
-							</Grid>
-							<Grid item xs={12} sm={4}>
+							</Grid> */}
+							<Grid item xs={12} sm={3}>
 								<TextField
 									type="number"
 									required
@@ -420,7 +447,7 @@ export default function AddToPlan({
 									InputLabelProps={{ shrink: true }}
 								/>
 							</Grid>
-							<Grid item xs={12} sm={4}>
+							<Grid item xs={12} sm={3}>
 								<TextField
 									type="number"
 									required

@@ -47,6 +47,23 @@ export async function mergeBillboardsAPI(billboard_ids = []) {
 	return data;
 }
 
+export async function addAssetInfoAPI(billboard_id = "", fd) {
+	const token = loginUtils.getUser().token;
+
+	const { data } = await axios.put(
+		"videos/billboards/asset-info/" + billboard_id,
+		fd,
+		{
+			headers: {
+				Authorization: token,
+				"Content-Type": "application/form-data",
+			},
+		}
+	);
+
+	return data;
+}
+
 export async function deleteBillboardsAPI(billboard_ids = []) {
 	const token = loginUtils.getUser().token;
 

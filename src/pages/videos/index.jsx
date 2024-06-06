@@ -61,18 +61,6 @@ const columnHelper = createColumnHelper();
 const speedCell = ({ getValue }) => `${getValue()}km/hr`;
 
 const columns = [
-	columnHelper.accessor("id", {
-		header: "Billboard Id",
-		enableColumnFilter: false,
-	}),
-	columnHelper.accessor("video_id", {
-		header: "Video Id",
-		enableColumnFilter: false,
-	}),
-	columnHelper.accessor("tracker_id", {
-		header: "Tracker Id",
-		enableColumnFilter: false,
-	}),
 	columnHelper.accessor("filename", {
 		cell: (info) => {
 			const filename = info.getValue();
@@ -88,143 +76,162 @@ const columns = [
 		header: "Video File name",
 		enableColumnFilter: false,
 	}),
-	columnHelper.accessor("zone_name", {
-		header: "Zone Name",
+	columnHelper.accessor("id", {
+		header: "Assest Id",
+		enableColumnFilter: false,
 	}),
-	columnHelper.accessor("state_name", {
-		header: "State Name",
+	columnHelper.accessor("tracker_id", {
+		header: "Tracker Id",
+		enableColumnFilter: false,
 	}),
-	columnHelper.accessor("city_name", {
-		header: "City Name",
-	}),
+
+	// columnHelper.accessor("zone_name", {
+	// 	header: "Zone Name",
+	// }),
+	// columnHelper.accessor("state_name", {
+	// 	header: "State Name",
+	// }),
+	// columnHelper.accessor("city_name", {
+	// 	header: "City Name",
+	// }),
+
 	columnHelper.accessor("distance_to_center", {
 		header: "Distance To Center",
 	}),
 	columnHelper.accessor("far_p_distance", {
-		header: "Far P Distance",
+		header: "Far Peripheral Distance",
 	}),
 	columnHelper.accessor("far_p_duration", {
-		header: "Far P Duration",
+		header: "Far Peripheral Duration",
 	}),
 	columnHelper.accessor("mid_p_distance", {
-		header: "Mid P Distance",
+		header: "Mid Peripheral Distance",
 	}),
 	columnHelper.accessor("mid_p_duration", {
-		header: "Mid P Duration",
+		header: "Mid Peripheral Duration",
 	}),
 	columnHelper.accessor("near_p_distance", {
-		header: "Near P Distance",
+		header: "Near Peripheral Distance",
 	}),
 	columnHelper.accessor("near_p_duration", {
-		header: "Near P Duration",
+		header: "Near Peripheral Duration",
 	}),
 	columnHelper.accessor("visibility_duration", {
 		header: "Visibility Duration",
 	}),
+	columnHelper.accessor("focal_vision_duration", {
+		header: "Focal Vision Duration",
+	}),
 	columnHelper.accessor("average_areas", {
-		header: "Average Areas",
+		header: "Frame Size",
 	}),
 	columnHelper.accessor("central_distance", {
-		header: "Central Distance",
+		header: "Distance from Center",
 	}),
 	columnHelper.accessor("central_duration", {
 		header: "Central Duration",
 	}),
-	columnHelper.accessor("confidence", {
-		header: "Confidence",
+	columnHelper.accessor("central_duration", {
+		header: "Average Speed",
 	}),
-	columnHelper.accessor("latitude0", {
-		header: "latitude 1",
+	columnHelper.accessor("central_duration", {
+		header: "Length Of Stretch",
+	}),
+	// columnHelper.accessor("confidence", {
+	// 	header: "Confidence",
+	// }),
+	// columnHelper.accessor("latitude0", {
+	// 	header: "latitude 1",
 
-		enableColumnFilter: false,
-	}),
-	columnHelper.accessor("longitude0", {
-		header: "longitude 1",
-		enableColumnFilter: false,
-	}),
-	columnHelper.accessor("speed0", {
-		header: "speed 1",
-		cell: speedCell,
-		enableColumnFilter: true,
-	}),
-	columnHelper.accessor("latitude1", {
-		header: "latitude 2",
-		enableColumnFilter: false,
-	}),
-	columnHelper.accessor("longitude1", {
-		header: "longitude 2",
-		enableColumnFilter: false,
-	}),
-	columnHelper.accessor("speed1", {
-		header: "speed 2",
-		cell: speedCell,
-		enableColumnFilter: true,
-	}),
-	columnHelper.accessor("latitude2", {
-		header: "latitude 3",
-		enableColumnFilter: false,
-	}),
-	columnHelper.accessor("longitude2", {
-		header: "longitude 3",
-		enableColumnFilter: false,
-	}),
-	columnHelper.accessor("speed2", {
-		header: "speed 3",
-		cell: speedCell,
-		enableColumnFilter: true,
-	}),
-	columnHelper.accessor("latitude3", {
-		header: "latitude 4",
-		enableColumnFilter: false,
-	}),
-	columnHelper.accessor("longitude3", {
-		header: "longitude 4",
-		enableColumnFilter: false,
-	}),
-	columnHelper.accessor("speed3", {
-		header: "speed 4",
-		cell: speedCell,
-		enableColumnFilter: true,
-	}),
-	columnHelper.accessor("latitude4", {
-		header: "latitude 5",
-		enableColumnFilter: false,
-	}),
-	columnHelper.accessor("longitude4", {
-		header: "longitude 5",
-		enableColumnFilter: false,
-	}),
-	columnHelper.accessor("speed4", {
-		header: "speed 5",
-		cell: speedCell,
-		enableColumnFilter: true,
-	}),
-	columnHelper.accessor("latitude5", {
-		header: "latitude 6",
-		enableColumnFilter: false,
-	}),
-	columnHelper.accessor("longitude5", {
-		header: "longitude 6",
-		enableColumnFilter: false,
-	}),
-	columnHelper.accessor("speed5", {
-		header: "speed 6",
-		cell: speedCell,
-		enableColumnFilter: true,
-	}),
-	columnHelper.accessor("latitude6", {
-		header: "latitude 7",
-		enableColumnFilter: false,
-	}),
-	columnHelper.accessor("longitude6", {
-		header: "longitude 7",
-		enableColumnFilter: false,
-	}),
-	columnHelper.accessor("speed6", {
-		header: "speed 7",
-		cell: speedCell,
-		enableColumnFilter: false,
-	}),
+	// 	enableColumnFilter: false,
+	// }),
+	// columnHelper.accessor("longitude0", {
+	// 	header: "longitude 1",
+	// 	enableColumnFilter: false,
+	// }),
+	// columnHelper.accessor("speed0", {
+	// 	header: "speed 1",
+	// 	cell: speedCell,
+	// 	enableColumnFilter: true,
+	// }),
+	// columnHelper.accessor("latitude1", {
+	// 	header: "latitude 2",
+	// 	enableColumnFilter: false,
+	// }),
+	// columnHelper.accessor("longitude1", {
+	// 	header: "longitude 2",
+	// 	enableColumnFilter: false,
+	// }),
+	// columnHelper.accessor("speed1", {
+	// 	header: "speed 2",
+	// 	cell: speedCell,
+	// 	enableColumnFilter: true,
+	// }),
+	// columnHelper.accessor("latitude2", {
+	// 	header: "latitude 3",
+	// 	enableColumnFilter: false,
+	// }),
+	// columnHelper.accessor("longitude2", {
+	// 	header: "longitude 3",
+	// 	enableColumnFilter: false,
+	// }),
+	// columnHelper.accessor("speed2", {
+	// 	header: "speed 3",
+	// 	cell: speedCell,
+	// 	enableColumnFilter: true,
+	// }),
+	// columnHelper.accessor("latitude3", {
+	// 	header: "latitude 4",
+	// 	enableColumnFilter: false,
+	// }),
+	// columnHelper.accessor("longitude3", {
+	// 	header: "longitude 4",
+	// 	enableColumnFilter: false,
+	// }),
+	// columnHelper.accessor("speed3", {
+	// 	header: "speed 4",
+	// 	cell: speedCell,
+	// 	enableColumnFilter: true,
+	// }),
+	// columnHelper.accessor("latitude4", {
+	// 	header: "latitude 5",
+	// 	enableColumnFilter: false,
+	// }),
+	// columnHelper.accessor("longitude4", {
+	// 	header: "longitude 5",
+	// 	enableColumnFilter: false,
+	// }),
+	// columnHelper.accessor("speed4", {
+	// 	header: "speed 5",
+	// 	cell: speedCell,
+	// 	enableColumnFilter: true,
+	// }),
+	// columnHelper.accessor("latitude5", {
+	// 	header: "latitude 6",
+	// 	enableColumnFilter: false,
+	// }),
+	// columnHelper.accessor("longitude5", {
+	// 	header: "longitude 6",
+	// 	enableColumnFilter: false,
+	// }),
+	// columnHelper.accessor("speed5", {
+	// 	header: "speed 6",
+	// 	cell: speedCell,
+	// 	enableColumnFilter: true,
+	// }),
+	// columnHelper.accessor("latitude6", {
+	// 	header: "latitude 7",
+	// 	enableColumnFilter: false,
+	// }),
+	// columnHelper.accessor("longitude6", {
+	// 	header: "longitude 7",
+	// 	enableColumnFilter: false,
+	// }),
+	// columnHelper.accessor("speed6", {
+	// 	header: "speed 7",
+	// 	cell: speedCell,
+	// 	enableColumnFilter: false,
+	// }),
 	columnHelper.accessor("created_at", {
 		header: "Created At",
 		enableColumnFilter: false,
@@ -534,7 +541,7 @@ const Videos = () => {
 			<Container component="div" maxWidth="xl">
 				<Box>
 					<Typography variant="h4" mb={2}>
-						Uploaded Videos
+						Assets
 					</Typography>
 					<TableContainer component={Paper}>
 						<Stack
