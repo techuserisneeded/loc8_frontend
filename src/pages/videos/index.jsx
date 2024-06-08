@@ -51,7 +51,12 @@ import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import SuperAdminLayout from "../../layouts/SuperAdminLayout";
 import DebouncedInput from "../../components/DebouncedInput";
 
-import { getVidoesAPI, deleteVideosAPI } from "../../apis/videos.apis";
+import {
+	getVidoesAPI,
+	deleteVideosAPI,
+	mergeBillboardsAPI,
+	deleteBillboardsAPI,
+} from "../../apis/videos.apis";
 import { Stack, TextField } from "@mui/material";
 import ASearchFilter from "./ASearchFilter";
 import base_url from "../../constants/base_url";
@@ -61,6 +66,26 @@ const columnHelper = createColumnHelper();
 const speedCell = ({ getValue }) => `${getValue()}km/hr`;
 
 const columns = [
+	columnHelper.accessor("select-col", {
+		id: "select_col",
+		header: ({ table }) => (
+			<Checkbox
+				checked={table.getIsAllRowsSelected()}
+				indeterminate={table.getIsSomeRowsSelected()}
+				onChange={table.getToggleAllRowsSelectedHandler()}
+			/>
+		),
+		cell: ({ row }) => (
+			<Checkbox
+				checked={row.getIsSelected()}
+				disabled={!row.getCanSelect()}
+				onChange={row.getToggleSelectedHandler()}
+			/>
+		),
+		enableColumnFilter: false,
+		enableSorting: false,
+		enableGlobalFilter: false,
+	}),
 	columnHelper.accessor("filename", {
 		cell: (info) => {
 			const filename = info.getValue();
@@ -85,6 +110,81 @@ const columns = [
 		enableColumnFilter: false,
 	}),
 
+	columnHelper.accessor("average_areas", {
+		header: "Frame Size",
+	}),
+
+	columnHelper.accessor("visibility_duration", {
+		header: "Visibility Duration",
+	}),
+
+	columnHelper.accessor("focal_vision_duration", {
+		header: "Focal Vision Duration",
+	}),
+
+	columnHelper.accessor("near_p_duration", {
+		header: "Near Peripheral Duration",
+	}),
+
+	columnHelper.accessor("mid_p_duration", {
+		header: "Mid Peripheral Duration",
+	}),
+
+	columnHelper.accessor("far_p_duration", {
+		header: "Far Peripheral Duration",
+	}),
+
+	columnHelper.accessor("distance_to_center", {
+		header: "Distance From Center",
+	}),
+	columnHelper.accessor("near_p_distance", {
+		header: "Near Peripheral Distance",
+	}),
+
+	columnHelper.accessor("mid_p_distance", {
+		header: "Mid Peripheral Distance",
+	}),
+
+	columnHelper.accessor("far_p_distance", {
+		header: "Far Peripheral Distance",
+	}),
+
+	columnHelper.accessor("average_speed", {
+		header: "Average Speed",
+	}),
+
+	columnHelper.accessor("length_of_stretch", {
+		header: "Length Of Stretch",
+	}),
+
+	columnHelper.accessor("vendor_name", {
+		header: "Vendor Name",
+	}),
+
+	columnHelper.accessor("location", {
+		header: "Location",
+	}),
+
+	columnHelper.accessor("media_type", {
+		header: "Media Type",
+	}),
+
+	columnHelper.accessor("illumination", {
+		header: "Illumination",
+	}),
+
+	columnHelper.accessor("area", {
+		header: "area",
+	}),
+
+	columnHelper.accessor("display_cost_per_month", {
+		header: "Display Cost Per Month",
+	}),
+
+	columnHelper.accessor("total_cost", {
+		header: "Total Cost",
+	}),
+
 	// columnHelper.accessor("zone_name", {
 	// 	header: "Zone Name",
 	// }),
@@ -95,48 +195,13 @@ const columns = [
 	// 	header: "City Name",
 	// }),
 
-	columnHelper.accessor("distance_to_center", {
-		header: "Distance To Center",
-	}),
-	columnHelper.accessor("far_p_distance", {
-		header: "Far Peripheral Distance",
-	}),
-	columnHelper.accessor("far_p_duration", {
-		header: "Far Peripheral Duration",
-	}),
-	columnHelper.accessor("mid_p_distance", {
-		header: "Mid Peripheral Distance",
-	}),
-	columnHelper.accessor("mid_p_duration", {
-		header: "Mid Peripheral Duration",
-	}),
-	columnHelper.accessor("near_p_distance", {
-		header: "Near Peripheral Distance",
-	}),
-	columnHelper.accessor("near_p_duration", {
-		header: "Near Peripheral Duration",
-	}),
-	columnHelper.accessor("visibility_duration", {
-		header: "Visibility Duration",
-	}),
-	columnHelper.accessor("focal_vision_duration", {
-		header: "Focal Vision Duration",
-	}),
-	columnHelper.accessor("average_areas", {
-		header: "Frame Size",
-	}),
-	columnHelper.accessor("central_distance", {
-		header: "Distance from Center",
-	}),
-	columnHelper.accessor("central_duration", {
-		header: "Central Duration",
-	}),
-	columnHelper.accessor("central_duration", {
-		header: "Average Speed",
-	}),
-	columnHelper.accessor("central_duration", {
-		header: "Length Of Stretch",
-	}),
+	// columnHelper.accessor("central_distance", {
+	// 	header: "Distance from Center",
+	// }),
+	// columnHelper.accessor("central_duration", {
+	// 	header: "Central Duration",
+	// }),
+
 	// columnHelper.accessor("confidence", {
 	// 	header: "Confidence",
 	// }),
@@ -410,9 +475,9 @@ const Videos = () => {
 	const { isLoading, data, mutate } = useSWR("/videos/", getVidoesAPI);
 	const [columnVisibility, setColumnVisibility] = useState({
 		average_areas: true,
-		central_distance: true,
-		central_duration: true,
-		confidence: true,
+		id: true,
+		tracker_id: true,
+		distance_to_center: true,
 		far_p_distance: true,
 		far_p_duration: true,
 		mid_p_distance: true,
@@ -420,29 +485,19 @@ const Videos = () => {
 		near_p_distance: true,
 		near_p_duration: true,
 		visibility_duration: true,
-		distance_to_center: true,
-		latitude0: false,
-		longitude0: false,
-		speed0: false,
-		latitude1: false,
-		longitude1: false,
-		speed1: false,
-		latitude2: false,
-		longitude2: false,
-		speed2: false,
-		latitude3: false,
-		longitude3: false,
-		speed3: false,
-		latitude4: false,
-		longitude4: false,
-		speed4: false,
-		latitude5: false,
-		longitude5: false,
-		speed5: false,
-		latitude6: false,
-		longitude6: false,
-		speed6: false,
+		latitude: false,
+		longitude: false,
 		created_at: true,
+		focal_vision_duration: false,
+		average_speed: true,
+		length_of_stretch: true,
+		vendor_name: true,
+		location: true,
+		media_type: true,
+		illumination: true,
+		area: true,
+		display_cost_per_month: true,
+		total_cost: true,
 	});
 
 	const table = useReactTable({
@@ -477,10 +532,10 @@ const Videos = () => {
 		debugColumns: true,
 	});
 
-	let selectedVideoIDs = [];
+	let selectedAssestIDs = [];
 
 	if (data) {
-		selectedVideoIDs = table.getSelectedRowModel().rows.map((v) => v.id) || [];
+		selectedAssestIDs = table.getSelectedRowModel().rows.map((v) => v.id) || [];
 	}
 
 	const toggleColumnDisplayPopUp = () => {
@@ -499,7 +554,61 @@ const Videos = () => {
 		setfilterOpen(true);
 	};
 
+	const handleMerge = () => {
+		if (!window.confirm("Are you sure you want to merge?!")) {
+			return;
+		}
+
+		setisDeleting(true);
+		mergeBillboardsAPI(selectedAssestIDs)
+			.then((v) => {
+				toast.success("Merge Successfull!!");
+				mutate();
+				table.resetRowSelection();
+			})
+			.catch((e) => {
+				toast.error("Something went wrong!");
+			})
+			.finally((v) => {
+				setisDeleting(true);
+			});
+	};
+
+	const handleDelete = () => {
+		if (
+			!window.confirm(
+				"Are you sure you want to delete the selected billboards?"
+			)
+		) {
+			return;
+		}
+
+		setisDeleting(true);
+		deleteBillboardsAPI(selectedAssestIDs)
+			.then((v) => {
+				toast.success("selected billboards deleted Successfully!!");
+				mutate();
+				table.resetRowSelection();
+			})
+			.catch((e) => {
+				toast.error("Something went wrong!");
+			})
+			.finally((v) => {
+				setisDeleting(false);
+			});
+	};
+
 	const handleDiscardVideo = async () => {
+		const videoIds = [
+			...new Set(
+				selectedAssestIDs.map((assetId) => {
+					const row = table.getRow(assetId);
+					const videoId = row.original.video_id;
+					return videoId;
+				})
+			),
+		];
+
 		if (
 			!window.confirm(
 				"Are you sure you want to delete this videos and its associated data? \nThis action is irreversible."
@@ -510,7 +619,7 @@ const Videos = () => {
 
 		setisDeleting(true);
 
-		Promise.all(selectedVideoIDs.map((videoId) => deleteVideosAPI(videoId)))
+		Promise.all(videoIds.map((videoId) => deleteVideosAPI(videoId)))
 			.then((v) => {
 				toast.success("Video discarded Successfully!!");
 				mutate();
@@ -548,7 +657,11 @@ const Videos = () => {
 							margin={"15px"}
 							justifyContent={"space-between"}
 							direction={"row"}>
-							<Stack direction={"row"} alignItems={"center"} gap={2}>
+							<Stack
+								direction={"row"}
+								width={"80%"}
+								alignItems={"center"}
+								gap={2}>
 								<ClickAwayListener onClickAway={handleFilterClose}>
 									<div>
 										<StyledTooltip
@@ -589,11 +702,32 @@ const Videos = () => {
 										</StyledTooltip>
 									</div>
 								</ClickAwayListener>
-								<DebouncedInput
-									value={globalFilter ?? ""}
-									onChange={(value) => setGlobalFilter(String(value))}
-								/>
-								{/* <Button
+
+								<Box flex={1}>
+									<DebouncedInput
+										label="Global Search"
+										value={globalFilter ?? ""}
+										onChange={(value) => setGlobalFilter(String(value))}
+									/>
+								</Box>
+
+								<Button
+									variant="contained"
+									size="small"
+									disableElevation
+									onClick={handleMerge}
+									disabled={selectedAssestIDs.length < 2}>
+									Merge Selected
+								</Button>
+								<Button
+									variant="contained"
+									size="small"
+									disableElevation
+									onClick={handleDelete}
+									disabled={selectedAssestIDs.length < 1}>
+									Delete Selected
+								</Button>
+								<Button
 									variant="contained"
 									size="small"
 									disableElevation
@@ -604,9 +738,9 @@ const Videos = () => {
 										width: "220px",
 									}}
 									onClick={handleDiscardVideo}
-									disabled={selectedVideoIDs.length === 0}>
+									disabled={selectedAssestIDs.length === 0}>
 									Discard Video
-								</Button> */}
+								</Button>
 							</Stack>
 							<ClickAwayListener onClickAway={handleTooltipClose}>
 								<div>
