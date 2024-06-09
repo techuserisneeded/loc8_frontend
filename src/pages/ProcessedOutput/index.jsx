@@ -47,15 +47,11 @@ const ProcessedOutput = () => {
 	};
 
 	const openAssetInfo = (row) => {
-		const avgSpeed =
-			data.video_coordinates.reduce((acc, c) => acc + c.speed, 0) /
-			data.video_coordinates.length;
-
 		setAssetInfoState({
 			isOpen: true,
 			assetId: row.id,
 			coords: data.video_coordinates?.map((v) => [v.latitude, v.longitude]),
-			avgSpeed,
+			row,
 		});
 	};
 
@@ -109,7 +105,7 @@ const ProcessedOutput = () => {
 				open={assetInfoState.isOpen}
 				onClose={handleAssetClose}
 				initialCoords={assetInfoState.coords}
-				avgSpeed={assetInfoState.avgSpeed}
+				row={assetInfoState.row}
 			/>
 		</SuperAdminLayout>
 	);

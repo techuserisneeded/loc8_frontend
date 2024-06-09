@@ -105,6 +105,12 @@ const columns = [
 		header: "Assest Id",
 		enableColumnFilter: false,
 	}),
+
+	columnHelper.accessor("video_id", {
+		header: "Video Id",
+		enableColumnFilter: false,
+	}),
+
 	columnHelper.accessor("tracker_id", {
 		header: "Tracker Id",
 		enableColumnFilter: false,
@@ -498,6 +504,7 @@ const Videos = () => {
 		area: true,
 		display_cost_per_month: true,
 		total_cost: true,
+		video_id: false,
 	});
 
 	const table = useReactTable({

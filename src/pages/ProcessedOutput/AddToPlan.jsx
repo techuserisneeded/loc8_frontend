@@ -17,7 +17,6 @@ import Slide from "@mui/material/Slide";
 import Box from "@mui/material/Box";
 import { Stack, Grid, TextField } from "@mui/material";
 
-import { addPlanAPI } from "../../apis/plans.apis";
 import { addAssetInfoAPI } from "../../apis/videos.apis";
 import { getColorBasedOnSpeed } from "../../utils/helper.utils";
 import Loader from "../../components/Loader";
@@ -41,9 +40,9 @@ export default function AddToPlan({
 	onClose,
 	assetId,
 	initialCoords = [],
-	avgSpeed = 0,
+	row = {},
 }) {
-	const [formState, setformState] = React.useState({});
+	const [formState, setformState] = React.useState(row);
 	const [isLoading, setisLoading] = React.useState(false);
 	const [locationText, setLocationText] = React.useState("");
 	const [coords, setcoords] = React.useState({ lat: 0, long: 0 });
@@ -146,16 +145,6 @@ export default function AddToPlan({
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
-		if (!formState.mapSSFile) {
-			alert("Map Screenshot is required!");
-			return;
-		}
-
-		if (!formState.siteSSFile) {
-			alert("Site Screenshot is required!");
-			return;
-		}
-
 		const data = {
 			media_type: formState.media_type.trim(),
 			illumination: formState.illumination.trim(),
@@ -225,6 +214,17 @@ export default function AddToPlan({
 				});
 		}
 	}, [coords.lat, coords.long]);
+
+	React.useEffect(() => {
+		setformState(row);
+		if (row.location) {
+			setLocationText(row.location);
+		}
+
+		if (row.latitude) {
+			setcoords({ lat: row.latitude, lon: row.longitude });
+		}
+	}, [row]);
 
 	return (
 		<Dialog
@@ -318,7 +318,7 @@ export default function AddToPlan({
 										/>
 										<Polyline
 											pathOptions={{
-												color: getColorBasedOnSpeed(avgSpeed),
+												color: getColorBasedOnSpeed(row.average_speed),
 												weight: 10,
 											}}
 											positions={initialCoords}
