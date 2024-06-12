@@ -16,6 +16,7 @@ import PlannerBriefList from "./pages/Planner/BriefList";
 import PlannerBriefDetails from "./pages/Planner/BriefDetails";
 import PlannerStartPlanning from "./pages/Planner/StartPlanning";
 import PlannerVideoDetails from "./pages/Planner/VideoDetails";
+import AssetInfo from "./pages/AssetInfo";
 
 export const authRouter = createBrowserRouter([
 	{
@@ -56,6 +57,10 @@ export const superAdminRouter = createBrowserRouter([
 	{
 		path: "/add-video/:video_id/processed-output",
 		element: <ProcessedOutput />,
+	},
+	{
+		path: "/add-asset/:assetId",
+		element: <AssetInfo />,
 	},
 	{
 		path: "/videos",

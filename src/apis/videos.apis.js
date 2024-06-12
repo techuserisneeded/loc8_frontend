@@ -64,6 +64,23 @@ export async function addAssetInfoAPI(billboard_id = "", fd) {
 	return data;
 }
 
+export async function getAssetInfoAPI(billboard_id = "") {
+	const token = loginUtils.getUser().token;
+
+	const { data } = await axios.get(
+		"videos/billboards/asset-info/" + billboard_id,
+
+		{
+			headers: {
+				Authorization: token,
+				"Content-Type": "application/form-data",
+			},
+		}
+	);
+
+	return data;
+}
+
 export async function deleteBillboardsAPI(billboard_ids = []) {
 	const token = loginUtils.getUser().token;
 

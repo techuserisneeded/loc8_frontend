@@ -10,7 +10,7 @@ import SuperAdminLayout from "../../layouts/SuperAdminLayout";
 import BillboardTable from "./BillboardTable";
 import VideoFileDetails from "./VideoFileDetails";
 import VideoCoordinatesTable from "./VideoCoordiatesTable";
-import AddToPlan from "./AddToPlan";
+import AddToPlan from "../../components/AddToPlan";
 
 import { getProcessedOutputAPI } from "../../apis/videos.apis";
 import roles from "../../constants/roles";

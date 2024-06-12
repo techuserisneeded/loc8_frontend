@@ -17,9 +17,9 @@ import Slide from "@mui/material/Slide";
 import Box from "@mui/material/Box";
 import { Stack, Grid, TextField } from "@mui/material";
 
-import { addAssetInfoAPI } from "../../apis/videos.apis";
-import { getColorBasedOnSpeed } from "../../utils/helper.utils";
-import Loader from "../../components/Loader";
+import { addAssetInfoAPI } from "../apis/videos.apis";
+import { getColorBasedOnSpeed } from "../utils/helper.utils";
+import Loader from "./Loader";
 
 import "leaflet/dist/leaflet.css";
 
@@ -128,14 +128,23 @@ export default function AddToPlan({
 			  ).toFixed(2)
 			: 0;
 
+	const area =
+		!isNaN(parseFloat(formState.width)) &&
+		!isNaN(parseFloat(formState.height)) &&
+		!isNaN(parseFloat(formState.quantity))
+			? parseFloat(formState.width) *
+			  parseFloat(formState.height) *
+			  parseFloat(formState.quantity)
+			: 0;
+
 	const printing_count =
-		!isNaN(parseFloat(formState.printing)) && !isNaN(parseFloat(formState.size))
-			? parseFloat(formState.printing) * parseFloat(formState.size)
+		!isNaN(parseFloat(formState.printing_rate)) && !isNaN(parseFloat(area))
+			? parseFloat(formState.printing_rate) * parseFloat(area)
 			: 0;
 
 	const mounting_count =
-		!isNaN(parseFloat(formState.mounting)) && !isNaN(parseFloat(formState.size))
-			? parseFloat(formState.mounting) * parseFloat(formState.size)
+		!isNaN(parseFloat(formState.mounting_rate)) && !isNaN(parseFloat(area))
+			? parseFloat(formState.mounting_rate) * parseFloat(area)
 			: 0;
 
 	const total = Number(
@@ -150,15 +159,15 @@ export default function AddToPlan({
 			illumination: formState.illumination.trim(),
 			duration: parseFloat(formState.duration),
 			cost_for_duration,
-			h: parseFloat(formState.h),
+			height: parseFloat(formState.height),
 			imp_per_month: parseFloat(formState.imp_per_month),
-			mounting: parseFloat(formState.mounting),
-			printing: parseFloat(formState.printing),
-			qty: parseInt(formState.qty),
+			mounting_rate: parseFloat(formState.mounting_rate),
+			printing_rate: parseFloat(formState.printing_rate),
+			quantity: parseInt(formState.quantity),
 			rental_per_month: parseFloat(formState.rental_per_month),
 			size: parseFloat(formState.size),
 			units: parseFloat(formState.units),
-			w: parseInt(formState.w),
+			width: parseInt(formState.width),
 			map_image: formState.mapSSFile,
 			site_image: formState.siteSSFile,
 			location: locationText,
@@ -222,7 +231,7 @@ export default function AddToPlan({
 		}
 
 		if (row.latitude) {
-			setcoords({ lat: row.latitude, lon: row.longitude });
+			setcoords({ lat: row.latitude, long: row.longitude });
 		}
 	}, [row]);
 
@@ -323,7 +332,7 @@ export default function AddToPlan({
 											}}
 											positions={initialCoords}
 										/>
-										<LocationPicker setPosition={setcoords} />
+										<LocationPicker position={coords} setPosition={setcoords} />
 									</MapContainer>
 								) : null}
 							</Grid>
@@ -335,10 +344,10 @@ export default function AddToPlan({
 									type="number"
 									required
 									fullWidth
-									id="w"
+									id="width"
 									label="Width"
-									name="w"
-									value={formState.w}
+									name="width"
+									value={formState.width}
 									onChange={handleInputChange}
 									InputLabelProps={{ shrink: true }}
 								/>
@@ -348,10 +357,10 @@ export default function AddToPlan({
 									type="number"
 									required
 									fullWidth
-									id="h"
+									id="height"
 									label="Height"
-									name="h"
-									value={formState.h}
+									name="height"
+									value={formState.height}
 									onChange={handleInputChange}
 									InputLabelProps={{ shrink: true }}
 								/>
@@ -361,16 +370,16 @@ export default function AddToPlan({
 									type="number"
 									required
 									fullWidth
-									id="qty"
+									id="quantity"
 									label="Quantity"
-									name="qty"
-									value={formState.qty}
+									name="quantity"
+									value={formState.quantity}
 									onChange={handleInputChange}
 									InputLabelProps={{ shrink: true }}
 								/>
 							</Grid>
 							<Grid item xs={12} sm={3}>
-								<TextField
+								{/* <TextField
 									type="number"
 									required
 									fullWidth
@@ -380,6 +389,19 @@ export default function AddToPlan({
 									value={formState.size}
 									onChange={handleInputChange}
 									InputLabelProps={{ shrink: true }}
+								/> */}
+
+								<TextField
+									type="number"
+									required
+									fullWidth
+									id="area"
+									label="area"
+									name="area"
+									value={area}
+									// onChange={handleInputChange}
+									InputLabelProps={{ shrink: true }}
+									disabled
 								/>
 							</Grid>
 							<Grid item xs={12} sm={3}>
@@ -439,10 +461,10 @@ export default function AddToPlan({
 									type="number"
 									required
 									fullWidth
-									id="printing"
+									id="printing_rate"
 									label="Printing Rate"
-									name="printing"
-									value={formState.printing}
+									name="printing_rate"
+									value={formState.printing_rate}
 									onChange={handleInputChange}
 									InputLabelProps={{ shrink: true }}
 								/>
@@ -452,10 +474,10 @@ export default function AddToPlan({
 									type="number"
 									required
 									fullWidth
-									id="mounting"
+									id="mounting_rate"
 									label="Mounting Rate"
-									name="mounting"
-									value={formState.mounting}
+									name="mounting_rate"
+									value={formState.mounting_rate}
 									onChange={handleInputChange}
 									InputLabelProps={{ shrink: true }}
 								/>
@@ -579,8 +601,12 @@ export default function AddToPlan({
 	);
 }
 
-function LocationPicker({ setPosition }) {
-	const [pos, setpos] = React.useState(null);
+function LocationPicker({ setPosition, position }) {
+	const [pos, setpos] = React.useState(
+		position.lat && position.long
+			? { lat: position.lat, lng: position.long }
+			: null
+	);
 
 	const map = useMapEvents({
 		click(v) {

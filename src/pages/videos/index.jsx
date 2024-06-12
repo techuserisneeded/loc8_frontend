@@ -104,6 +104,17 @@ const columns = [
 	columnHelper.accessor("id", {
 		header: "Assest Id",
 		enableColumnFilter: false,
+		cell: (info) => {
+			const assetId = info.row.original.id;
+
+			const aurl = "/add-asset/" + assetId;
+
+			return (
+				<a href={aurl} target="_blank" rel="noreferrer">
+					{assetId}
+				</a>
+			);
+		},
 	}),
 
 	columnHelper.accessor("video_id", {
