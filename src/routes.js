@@ -90,6 +90,10 @@ export const adminRouter = createBrowserRouter([
 		element: <ProcessedOutput />,
 	},
 	{
+		path: "/add-asset/:assetId",
+		element: <AssetInfo />,
+	},
+	{
 		path: "/planners",
 		element: <PlannerList />,
 	},

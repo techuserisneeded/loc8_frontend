@@ -44,6 +44,8 @@ const ProcessedOutput = () => {
 			coords: [],
 			avgSpeed: 0,
 		});
+
+		mutate();
 	};
 
 	const openAssetInfo = (row) => {
