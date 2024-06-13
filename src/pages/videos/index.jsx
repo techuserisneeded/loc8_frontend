@@ -3,6 +3,7 @@ import useSWR from "swr";
 import { styled } from "@mui/material/styles";
 import { toast } from "react-toastify";
 import moment from "moment/moment";
+import { mkConfig, generateCsv, download } from "export-to-csv";
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -26,6 +27,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 
 import IconButton from "@mui/material/IconButton";
+import GetAppIcon from "@mui/icons-material/GetApp";
 import {
 	flexRender,
 	getCoreRowModel,
@@ -64,6 +66,13 @@ import base_url from "../../constants/base_url";
 const columnHelper = createColumnHelper();
 
 const speedCell = ({ getValue }) => `${getValue()}km/hr`;
+
+const csvConfig = mkConfig({
+	fieldSeparator: ",",
+	filename: "detected_assets",
+	decimalSeparator: ".",
+	useKeysAsHeaders: true,
+});
 
 const columns = [
 	columnHelper.accessor("select-col", {
@@ -653,6 +662,20 @@ const Videos = () => {
 			});
 	};
 
+	const exportExcel = () => {
+		const rows = table.getFilteredRowModel().rows;
+
+		const rowData = rows.map((row) => {
+			const testRowData = Object.fromEntries(
+				Object.entries(row.original).filter((arr) => columnVisibility[arr[0]])
+			);
+			return testRowData;
+		});
+
+		const csv = generateCsv(csvConfig)(rowData);
+		download(csvConfig)(csv);
+	};
+
 	if (!data) {
 		return (
 			<SuperAdminLayout activeLink="/videos">
@@ -753,11 +776,23 @@ const Videos = () => {
 										margin: "15px",
 										backgroundColor: "red",
 										color: "white",
-										width: "220px",
 									}}
 									onClick={handleDiscardVideo}
 									disabled={selectedAssestIDs.length === 0}>
 									Discard Video
+								</Button>
+								<Button
+									variant="contained"
+									size="small"
+									disableElevation
+									startIcon={<GetAppIcon />}
+									sx={{
+										margin: "15px",
+										backgroundColor: "green",
+										color: "white",
+									}}
+									onClick={exportExcel}>
+									Export
 								</Button>
 							</Stack>
 							<ClickAwayListener onClickAway={handleTooltipClose}>
