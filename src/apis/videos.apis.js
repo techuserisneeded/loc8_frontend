@@ -29,13 +29,14 @@ export async function deleteVideosAPI(video_id) {
 	return data;
 }
 
-export async function mergeBillboardsAPI(billboard_ids = []) {
+export async function mergeBillboardsAPI(billboard_ids = [], selected_id) {
 	const token = loginUtils.getUser().token;
 
 	const { data } = await axios.post(
 		"videos/billboards/merge",
 		{
 			billboard_ids,
+			selected_id,
 		},
 		{
 			headers: {

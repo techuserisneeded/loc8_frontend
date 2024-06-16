@@ -10,10 +10,18 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function ModalContainer({ open, onClose, children }) {
+export default function ModalContainer({
+	open,
+	onClose,
+	children,
+	title,
+	width,
+}) {
 	const handleClose = () => {
 		onClose?.(false);
 	};
+
+	const maxWidth = width ? width : "sm";
 
 	return (
 		<React.Fragment>
@@ -21,8 +29,9 @@ export default function ModalContainer({ open, onClose, children }) {
 				open={open}
 				TransitionComponent={Transition}
 				keepMounted
+				maxWidth={maxWidth}
 				onClose={handleClose}>
-				<DialogTitle>{"Filters"}</DialogTitle>
+				<DialogTitle>{title}</DialogTitle>
 				<DialogContent sx={{ minWidth: "450px" }}>{children}</DialogContent>
 				{/* <DialogActions>
 					<Button onClick={handleClose}>Cancel</Button>

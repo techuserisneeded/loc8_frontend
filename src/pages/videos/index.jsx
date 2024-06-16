@@ -62,6 +62,7 @@ import {
 import { Stack, TextField } from "@mui/material";
 import ASearchFilter from "./ASearchFilter";
 import base_url from "../../constants/base_url";
+import MergeDialog from "./MergeDialog";
 
 const columnHelper = createColumnHelper();
 
@@ -498,6 +499,11 @@ const Videos = () => {
 		pageSize: 10,
 	});
 
+	const [mergeSate, setMergeSate] = useState({
+		isOpen: false,
+		rows: [],
+	});
+
 	const { isLoading, data, mutate } = useSWR("/videos/", getVidoesAPI);
 	const [columnVisibility, setColumnVisibility] = useState({
 		average_areas: true,
@@ -581,24 +587,16 @@ const Videos = () => {
 		setfilterOpen(true);
 	};
 
-	const handleMerge = () => {
-		if (!window.confirm("Are you sure you want to merge?!")) {
-			return;
-		}
+	const openMergeDialog = () => {
+		const rowsToMerge = selectedAssestIDs.map((assetId) => {
+			const row = table.getRow(assetId);
+			return row.original;
+		});
 
-		setisDeleting(true);
-		mergeBillboardsAPI(selectedAssestIDs)
-			.then((v) => {
-				toast.success("Merge Successfull!!");
-				mutate();
-				table.resetRowSelection();
-			})
-			.catch((e) => {
-				toast.error("Something went wrong!");
-			})
-			.finally((v) => {
-				setisDeleting(true);
-			});
+		setMergeSate({
+			isOpen: true,
+			rows: rowsToMerge,
+		});
 	};
 
 	const handleDelete = () => {
@@ -674,6 +672,18 @@ const Videos = () => {
 
 		const csv = generateCsv(csvConfig)(rowData);
 		download(csvConfig)(csv);
+	};
+
+	const handleMergeSucess = () => {
+		table.resetRowSelection();
+		mutate();
+	};
+
+	const handleMergeDialogClose = () => {
+		setMergeSate({
+			isOpen: false,
+			rows: [],
+		});
 	};
 
 	if (!data) {
@@ -756,7 +766,7 @@ const Videos = () => {
 									variant="contained"
 									size="small"
 									disableElevation
-									onClick={handleMerge}
+									onClick={openMergeDialog}
 									disabled={selectedAssestIDs.length < 2}>
 									Merge Selected
 								</Button>
@@ -992,6 +1002,12 @@ const Videos = () => {
 							</IconButton>
 						</Stack>
 					</TableContainer>
+					<MergeDialog
+						open={mergeSate.isOpen}
+						rows={mergeSate.rows}
+						onClose={handleMergeDialogClose}
+						onMerge={handleMergeSucess}
+					/>
 				</Box>
 			</Container>
 		</SuperAdminLayout>
