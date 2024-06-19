@@ -27,6 +27,7 @@ import ViewListIcon from "@mui/icons-material/ViewList";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import PublicIcon from "@mui/icons-material/Public";
 import PersonPinIcon from "@mui/icons-material/PersonPin";
+import FunctionsIcon from "@mui/icons-material/Functions";
 
 import Copyright from "../components/Copyright";
 
@@ -94,6 +95,15 @@ const navs = [
 		isAdmin: false,
 		isController: true,
 		isPlanner: true,
+	},
+	{
+		title: "Key Metrics",
+		link: "/key-metrics",
+		Icon: FunctionsIcon,
+		isSuperAdmin: true,
+		isAdmin: false,
+		isController: false,
+		isPlanner: false,
 	},
 ];
 

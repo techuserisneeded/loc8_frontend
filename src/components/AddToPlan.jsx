@@ -225,13 +225,21 @@ export default function AddToPlan({
 	}, [coords.lat, coords.long]);
 
 	React.useEffect(() => {
-		setformState(row);
+		// if (row) {
+		// 	setformState(row);
+		// }
 		if (row.location) {
 			setLocationText(row.location);
 		}
 
 		if (row.latitude) {
 			setcoords({ lat: row.latitude, long: row.longitude });
+		}
+	}, [row.location, row.latitude, row.longitude]);
+
+	React.useEffect(() => {
+		if (row) {
+			setformState(row);
 		}
 	}, [row]);
 

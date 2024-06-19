@@ -31,7 +31,8 @@ const ProcessedOutput = () => {
 	);
 
 	const isAuthorizedForActions =
-		role_id === roles.SUPERADMIN || data?.created_by_user_id === user_id;
+		role_id === roles.SUPERADMIN ||
+		data?.video_details?.created_by_user_id === user_id;
 
 	const handleMerge = () => {
 		mutate();
@@ -102,13 +103,15 @@ const ProcessedOutput = () => {
 				</>
 			) : null}
 
-			<AddToPlan
-				assetId={assetInfoState.assetId}
-				open={assetInfoState.isOpen}
-				onClose={handleAssetClose}
-				initialCoords={assetInfoState.coords}
-				row={assetInfoState.row}
-			/>
+			{assetInfoState?.assetId ? (
+				<AddToPlan
+					assetId={assetInfoState.assetId}
+					open={assetInfoState.isOpen}
+					onClose={handleAssetClose}
+					initialCoords={assetInfoState.coords}
+					row={assetInfoState.row}
+				/>
+			) : null}
 		</SuperAdminLayout>
 	);
 };

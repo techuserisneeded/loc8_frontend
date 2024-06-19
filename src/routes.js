@@ -17,6 +17,7 @@ import PlannerBriefDetails from "./pages/Planner/BriefDetails";
 import PlannerStartPlanning from "./pages/Planner/StartPlanning";
 import PlannerVideoDetails from "./pages/Planner/VideoDetails";
 import AssetInfo from "./pages/AssetInfo";
+import KeyMetricsPage from "./pages/KeyMetricsPage";
 
 export const authRouter = createBrowserRouter([
 	{
@@ -77,6 +78,10 @@ export const superAdminRouter = createBrowserRouter([
 	{
 		path: "/edit-brief/:brief_id",
 		element: <EditBrief />,
+	},
+	{
+		path: "/key-metrics",
+		element: <KeyMetricsPage />,
 	},
 ]);
 
