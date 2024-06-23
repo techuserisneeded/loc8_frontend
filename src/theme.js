@@ -1,10 +1,12 @@
 import { createTheme } from "@mui/material/styles";
 
+import colors from "./constants/colors";
+
 const theme = createTheme({
 	palette: {
 		primary: {
 			// main: "#042374",
-			main: "#f39c1c",
+			main: colors.PRIMARY,
 		},
 	},
 	typography: {
