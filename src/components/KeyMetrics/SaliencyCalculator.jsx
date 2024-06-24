@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -24,7 +24,9 @@ import AreaSelector from "../AreaSelector";
 import CustomButton from "../CustomButton";
 
 import colors from "../../constants/colors";
-import { Box } from "@mui/material";
+import { APIerrorMessageHandler } from "../../utils/helper.utils";
+import { calculateSaliencyAPI } from "../../apis/metrics.apis";
+import { toast } from "react-toastify";
 
 const parameters = [
 	{
@@ -57,7 +59,13 @@ const parameters = [
 	},
 ];
 
-const SaliencyCalculator = () => {
+function reduceParams(acc, v) {
+	acc[v.key] = v.weightings;
+
+	return acc;
+}
+
+const SaliencyCalculator = ({ setisLoading }) => {
 	const [selectedLevel, setselectedLevel] = useState("city");
 
 	const [selectedArea, setSelectedArea] = useState({});
@@ -86,7 +94,9 @@ const SaliencyCalculator = () => {
 		setrearViewParams(params);
 	};
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+
 		if (!selectedArea?.city?.id) {
 			alert("select the zone, state and city");
 			return;
@@ -97,14 +107,26 @@ const SaliencyCalculator = () => {
 			return;
 		}
 
+		setisLoading(true);
+
 		const body = {
 			zone_id: selectedArea.zone.id,
 			state_id: selectedArea.state.id,
 			city_id: selectedArea.city.id,
 			level: selectedLevel,
-			front_weightings: frontViewParams,
-			rear_weightings: rearViewParams,
+			front_weightings: frontViewParams.reduce(reduceParams, {}),
+			rear_weightings: rearViewParams.reduce(reduceParams, {}),
 		};
+
+		try {
+			await calculateSaliencyAPI(body);
+
+			toast.success("Saliency set successfully!");
+		} catch (error) {
+			APIerrorMessageHandler(error);
+		} finally {
+			setisLoading(false);
+		}
 	};
 
 	return (
@@ -223,6 +245,7 @@ function ParameterSelectionBody({ onChange }) {
 								<TextField
 									placeholder="Add Weightings"
 									size="small"
+									type="number"
 									value={params[i].weightings}
 									onChange={handleChange.bind(this, i, "weightings")}
 									sx={{ backgroundColor: "white" }}

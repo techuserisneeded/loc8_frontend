@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import key_labels from "../constants/key_lables";
 
 export const ROLE_WISE_PLAN_CSV_HEADERS = {
@@ -115,4 +116,13 @@ export const getColorBasedOnSpeed = (currentSpeed) => {
 	} else {
 		return "green";
 	}
+};
+
+export const APIerrorMessageHandler = (error) => {
+	if (error?.response?.data?.message) {
+		toast.error(error?.response?.data?.message);
+		return;
+	}
+	console.log(error);
+	toast.error("something went wrong!");
 };

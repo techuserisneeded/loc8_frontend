@@ -6,9 +6,11 @@ import Box from "@mui/material/Box";
 
 import CollapsibleContainer from "./CollapsibleContainer";
 import SaliencyCalculator from "./SaliencyCalculator";
+import Loader from "../Loader";
 
 export default function KeyMetrics() {
 	const [collapseStates, setcollapseStates] = useState([true, false, false]);
+	const [isLoading, setisLoading] = useState(false);
 
 	const toggleState = (index) => {
 		setcollapseStates((prev) => {
@@ -19,27 +21,30 @@ export default function KeyMetrics() {
 	};
 
 	return (
-		<Stack gap={3}>
-			<CollapsibleContainer
-				open={collapseStates[0]}
-				onToggle={toggleState.bind(this, 0)}
-				title={"Estimate Saliency Score"}>
-				<Box>
-					<SaliencyCalculator />
-				</Box>
-			</CollapsibleContainer>
-			<CollapsibleContainer
-				open={collapseStates[1]}
-				onToggle={toggleState.bind(this, 1)}
-				title={"Estimate Efficiency Score"}>
-				<Typography>Calculate Efficiency Score</Typography>
-			</CollapsibleContainer>
-			<CollapsibleContainer
-				open={collapseStates[2]}
-				onToggle={toggleState.bind(this, 2)}
-				title={"Estimate Impressions"}>
-				<Typography>Calculate Impressions</Typography>
-			</CollapsibleContainer>
-		</Stack>
+		<>
+			<Stack gap={3}>
+				<CollapsibleContainer
+					open={collapseStates[0]}
+					onToggle={toggleState.bind(this, 0)}
+					title={"Estimate Saliency Score"}>
+					<Box>
+						<SaliencyCalculator setisLoading={setisLoading} />
+					</Box>
+				</CollapsibleContainer>
+				<CollapsibleContainer
+					open={collapseStates[1]}
+					onToggle={toggleState.bind(this, 1)}
+					title={"Estimate Efficiency Score"}>
+					<Typography>Calculate Efficiency Score</Typography>
+				</CollapsibleContainer>
+				<CollapsibleContainer
+					open={collapseStates[2]}
+					onToggle={toggleState.bind(this, 2)}
+					title={"Estimate Impressions"}>
+					<Typography>Calculate Impressions</Typography>
+				</CollapsibleContainer>
+			</Stack>
+			<Loader open={isLoading} />
+		</>
 	);
 }
