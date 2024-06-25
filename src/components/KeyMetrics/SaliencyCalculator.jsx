@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -57,10 +57,14 @@ const parameters = [
 		label: "Speed",
 		key: "average_speed",
 	},
+	{
+		label: "Saliency",
+		key: "saliency",
+	},
 ];
 
 function reduceParams(acc, v) {
-	acc[v.key] = v.weightings;
+	acc[v.key] = parseFloat(v.weightings);
 
 	return acc;
 }
@@ -201,7 +205,9 @@ function ParameterSelectionBody({ onChange }) {
 
 	const removeParams = (index) => {
 		setparams((prev) => {
-			return prev.filter((v, i) => i !== index);
+			return prev.filter((v, i) => {
+				return i !== index;
+			});
 		});
 	};
 
@@ -213,10 +219,13 @@ function ParameterSelectionBody({ onChange }) {
 
 			d[i] = { ...d[i], [key]: value.trim() };
 
-			onChange?.(d);
 			return d;
 		});
 	};
+
+	useEffect(() => {
+		onChange?.(params);
+	}, [onChange, params]);
 
 	return (
 		<>
