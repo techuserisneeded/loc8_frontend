@@ -14,7 +14,12 @@ export async function addPlanAPI(fd) {
 	return data;
 }
 
-export async function getMediaPlansAPI({ zone_id, state_id, city_id }) {
+export async function getMediaPlansAPI({
+	zone_id,
+	state_id,
+	city_id,
+	...rest
+}) {
 	const token = loginUtils.getUser().token;
 
 	const { data } = await axios.get("plans/plans/media", {
@@ -22,6 +27,7 @@ export async function getMediaPlansAPI({ zone_id, state_id, city_id }) {
 			city_id,
 			state_id,
 			zone_id,
+			...rest,
 		},
 		headers: {
 			Authorization: token,

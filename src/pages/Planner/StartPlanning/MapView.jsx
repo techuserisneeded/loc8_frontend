@@ -94,7 +94,7 @@ const MapView = ({
 	const handleClosePopUp = () => setActivePopup(null);
 
 	const handleDeletePlan = (plan_id) => {
-		if (!window.confirm("Are you sure you want to delete?")) {
+		if (!window.confirm("Are you sure you want to remove this plan?")) {
 			return;
 		}
 

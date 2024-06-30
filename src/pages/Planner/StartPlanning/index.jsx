@@ -64,6 +64,11 @@ const StartPlanning = () => {
 
 	const [isPlanListOpen, setIsPlanListOpen] = useState(false);
 	const [mediaFilterOpen, setmediaFilterOpen] = useState(false);
+	const [mediaData, setMediaData] = useState([]);
+	const [mediaFilter, setmediaFilter] = useState({
+		visibility_duration_min: 0,
+		visibility_duration_max: 0,
+	});
 
 	const {
 		data = {},
@@ -75,13 +80,17 @@ const StartPlanning = () => {
 		getBudgetDetailsByBudgetIdAPI.bind(this, budget_id)
 	);
 
-	const mediaRespState = useSWR(data?.budget ? "/plans/media" : null, () => {
-		return getMediaPlansAPI({
-			city_id: data?.budget?.city_id,
-			state_id: data?.budget?.state_id,
-			zone_id: data?.budget?.zone_id,
-		});
-	});
+	// const mediaRespState = useSWR(
+	// 	data?.budget ? "/plans/media" : null,
+	// 	(filters = {}) => {
+	// 		console.log({ filters });
+	// 		return getMediaPlansAPI({
+	// 			city_id: data?.budget?.city_id,
+	// 			state_id: data?.budget?.state_id,
+	// 			zone_id: data?.budget?.zone_id,
+	// 		});
+	// 	}
+	// );
 
 	const handlePlanClose = () => {
 		setaddToPlanState({
@@ -243,16 +252,23 @@ const StartPlanning = () => {
 					<ClickAwayListener onClickAway={handleFilterClose}>
 						<div>
 							<StyledTooltip
-								PopperProps={{
-									disablePortal: true,
-								}}
 								placement="left-start"
 								onClose={handleFilterClose}
 								open={mediaFilterOpen}
 								disableFocusListener
 								disableHoverListener
 								disableTouchListener
-								title={<MediaFilters />}>
+								title={
+									<MediaFilters
+										setisLoaderOpen={setisLoaderOpen}
+										setMediaData={setMediaData}
+										city_id={data?.budget?.city_id}
+										state_id={data?.budget?.state_id}
+										zone_id={data?.budget?.zone_id}
+										filters={mediaFilter}
+										setfilters={setmediaFilter}
+									/>
+								}>
 								<CustomButton
 									variant="contained"
 									size="small"
@@ -276,7 +292,8 @@ const StartPlanning = () => {
 								videos={data.videos || []}
 								onAddToPlan={openAddToPlan}
 								onAddToWorkSpace={openAddToWorkSpace}
-								billboards={mediaRespState.data}
+								billboards={mediaData}
+								// billboards={mediaRespState.data}
 								plans={data?.plans}
 								refreshPlanData={mutate}
 								budgetId={data?.budget?.budget_id}
