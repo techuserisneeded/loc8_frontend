@@ -147,6 +147,7 @@ const BriefList = () => {
 								<TableHeadCell align="right">City</TableHeadCell>
 								<TableHeadCell align="right">Budget</TableHeadCell>
 								<TableHeadCell align="right">Start Date</TableHeadCell>
+								<TableHeadCell align="right">Created By</TableHeadCell>
 								<TableHeadCell align="right">Brief Status</TableHeadCell>
 								<TableHeadCell align="right">Action</TableHeadCell>
 							</TableRow>
@@ -213,6 +214,9 @@ const BriefList = () => {
 											{row.start_date
 												? moment(row.start_date).format("YYYY-MM-DD")
 												: "-"}
+										</TableCell>
+										<TableCell align="right">
+											{row.first_name + " " + row.last_name}
 										</TableCell>
 										<TableCell align="right">
 											<BriefStatusTag statusId={row.status} />

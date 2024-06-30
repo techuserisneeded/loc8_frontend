@@ -1,8 +1,8 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 
-export default function CustomButton(props) {
+const CustomButton = forwardRef((props, ref) => {
 	const loadingProps = {};
 
 	if (props.isLoading) {
@@ -15,8 +15,11 @@ export default function CustomButton(props) {
 			size="small"
 			variant="contained"
 			disableElevation
+			ref={ref}
 			{...props}
 			{...loadingProps}
 		/>
 	);
-}
+});
+
+export default CustomButton;

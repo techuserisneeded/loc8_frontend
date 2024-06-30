@@ -14,6 +14,42 @@ export async function addPlanAPI(fd) {
 	return data;
 }
 
+export async function getMediaPlansAPI({ zone_id, state_id, city_id }) {
+	const token = loginUtils.getUser().token;
+
+	const { data } = await axios.get("plans/plans/media", {
+		params: {
+			city_id,
+			state_id,
+			zone_id,
+		},
+		headers: {
+			Authorization: token,
+		},
+	});
+
+	return data;
+}
+
+export async function addAssetsToPlan(
+	body = {
+		billboards: [],
+		budget_id: null,
+		brief_id: null,
+		video_id: null,
+	}
+) {
+	const token = loginUtils.getUser().token;
+
+	const { data } = await axios.post("plans/plans/assets", body, {
+		headers: {
+			Authorization: token,
+		},
+	});
+
+	return data;
+}
+
 export async function deletePlanById(planId) {
 	const token = loginUtils.getUser().token;
 

@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import useSWR from "swr";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { styled } from "@mui/material/styles";
 
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import { Stack, Grid, Paper, IconButton } from "@mui/material";
+import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
 
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import DoneIcon from "@mui/icons-material/Done";
@@ -18,16 +21,32 @@ import CustomButton from "../../../components/CustomButton";
 import MapView from "./MapView";
 import AddToPlan from "./AddToPlan";
 import PlanList from "./PlanList";
+import QuickViewTable from "./QuickViewTable";
 
 import {
 	getBudgetDetailsByBudgetIdAPI,
 	finishPlanAPI,
 } from "../../../apis/briefs.apis";
+import { getMediaPlansAPI } from "../../../apis/plans.apis";
 import {
 	mapPlanCSVDownload,
 	convertToCSV,
 	getTotal,
 } from "../../../utils/helper.utils";
+import AddToWorkSpace from "./AddToWorkSpace";
+import MediaFilters from "./MediaFilters";
+
+const StyledTooltip = styled(({ className, ...props }) => (
+	<Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+	[`& .${tooltipClasses.tooltip}`]: {
+		backgroundColor: "#fff",
+		color: "rgba(0, 0, 0, 0.87)",
+		maxWidth: 800,
+		fontSize: theme.typography.pxToRem(12),
+		border: "1px solid #dadde9",
+	},
+}));
 
 const StartPlanning = () => {
 	const { budget_id } = useParams();
@@ -36,9 +55,15 @@ const StartPlanning = () => {
 		video_id: null,
 	});
 
+	const [addToWorkSpaceState, setaddToWorkSpaceState] = useState({
+		isOpen: false,
+		video_id: null,
+	});
+
 	const [isLoaderOpen, setisLoaderOpen] = useState(false);
 
 	const [isPlanListOpen, setIsPlanListOpen] = useState(false);
+	const [mediaFilterOpen, setmediaFilterOpen] = useState(false);
 
 	const {
 		data = {},
@@ -49,6 +74,14 @@ const StartPlanning = () => {
 		budget_id ? "briefs/budgets/" + budget_id : null,
 		getBudgetDetailsByBudgetIdAPI.bind(this, budget_id)
 	);
+
+	const mediaRespState = useSWR(data?.budget ? "/plans/media" : null, () => {
+		return getMediaPlansAPI({
+			city_id: data?.budget?.city_id,
+			state_id: data?.budget?.state_id,
+			zone_id: data?.budget?.zone_id,
+		});
+	});
 
 	const handlePlanClose = () => {
 		setaddToPlanState({
@@ -108,6 +141,32 @@ const StartPlanning = () => {
 		}
 	};
 
+	const openAddToWorkSpace = (video_id) => {
+		if (data.videos) {
+			setaddToWorkSpaceState({
+				isOpen: true,
+				video_id,
+			});
+		} else {
+			alert("No Videos Found");
+		}
+	};
+
+	const handleOncloseWorkSpace = () => {
+		setaddToWorkSpaceState({
+			isOpen: false,
+			video_id: null,
+		});
+	};
+
+	const openFilter = () => {
+		setmediaFilterOpen(true);
+	};
+
+	const handleFilterClose = () => {
+		setmediaFilterOpen(false);
+	};
+
 	const totalAmount = data.plans ? getTotal(data.plans, "total") : 0;
 	const totalCostForDuration = data.plans
 		? getTotal(data.plans, "cost_for_duration")
@@ -139,9 +198,21 @@ const StartPlanning = () => {
 				</Typography>
 				<Divider />
 				<Stack direction={"row"} gap={3} mt={2}>
-					<LabelValueDisplay label="Zone" value={data?.budget?.zone_name} />
-					<LabelValueDisplay label="State" value={data?.budget?.state_name} />
-					<LabelValueDisplay label="City" value={data?.budget?.city_name} />
+					<LabelValueDisplay
+						label="Zone"
+						value={data?.budget?.zone_name}
+						isStr
+					/>
+					<LabelValueDisplay
+						label="State"
+						value={data?.budget?.state_name}
+						isStr
+					/>
+					<LabelValueDisplay
+						label="City"
+						value={data?.budget?.city_name}
+						isStr
+					/>
 					<LabelValueDisplay
 						label="Budget"
 						value={data.budget?.budget}
@@ -163,16 +234,58 @@ const StartPlanning = () => {
 						<CloudDownloadIcon color="primary" />
 					</IconButton>
 				</Stack>
+				<Stack
+					mt={2}
+					direction={"row"}
+					width={"80%"}
+					alignItems={"center"}
+					gap={2}>
+					<ClickAwayListener onClickAway={handleFilterClose}>
+						<div>
+							<StyledTooltip
+								PopperProps={{
+									disablePortal: true,
+								}}
+								placement="left-start"
+								onClose={handleFilterClose}
+								open={mediaFilterOpen}
+								disableFocusListener
+								disableHoverListener
+								disableTouchListener
+								title={<MediaFilters />}>
+								<CustomButton
+									variant="contained"
+									size="small"
+									disableElevation
+									onClick={openFilter}>
+									Media Data
+								</CustomButton>
+							</StyledTooltip>
+						</div>
+					</ClickAwayListener>
+				</Stack>
 			</Box>
 			<Grid mt={2} spacing={2} container>
-				<Grid md={8} item>
+				<Grid md={4} item>
+					<QuickViewTable rows={data.plans} />
+				</Grid>
+				<Grid md={6} item>
 					<Box>
 						<Paper>
-							<MapView videos={data.videos || []} onAddToPlan={openAddToPlan} />
+							<MapView
+								videos={data.videos || []}
+								onAddToPlan={openAddToPlan}
+								onAddToWorkSpace={openAddToWorkSpace}
+								billboards={mediaRespState.data}
+								plans={data?.plans}
+								refreshPlanData={mutate}
+								budgetId={data?.budget?.budget_id}
+								briefId={data?.budget?.brief_id}
+							/>
 						</Paper>
 					</Box>
 				</Grid>
-				<Grid md={4} item>
+				<Grid md={2} item>
 					<Stack gap={2}>
 						<LabelValueDisplay value={totalUnits} label="Total Units" />
 						<LabelValueDisplay
@@ -222,6 +335,14 @@ const StartPlanning = () => {
 				onClose={handlePlanListClose}
 				disableDelete={data?.budget?.status === 2}
 			/>
+			<AddToWorkSpace
+				open={addToWorkSpaceState.isOpen}
+				onClose={handleOncloseWorkSpace}
+				videoId={addToWorkSpaceState.video_id}
+				budgetId={data?.budget?.budget_id}
+				briefId={data?.budget?.brief_id}
+				onAddToPlan={mutate}
+			/>
 		</SuperAdminLayout>
 	);
 };
@@ -231,21 +352,20 @@ function LabelValueDisplay({
 	value = "",
 	direction = "row",
 	isCurrency,
+	isStr = false,
 	...rest
 }) {
-	if (!value) {
-		return null;
-	}
+	const v = !isStr ? (isNaN(value) ? 0 : value) : value;
 
 	const newVal = isCurrency
 		? new Intl.NumberFormat("en-IN", {
 				style: "currency",
 				currency: "INR",
-		  }).format(value)
-		: value;
+		  }).format(v)
+		: v;
 
 	return (
-		<Stack alignItems={"center"} gap={1} direction={direction} {...rest}>
+		<Stack gap={1} direction={direction} {...rest}>
 			<Typography variant="body" color={"grey"}>
 				{label} :{" "}
 			</Typography>

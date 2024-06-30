@@ -26,7 +26,7 @@ const ProcessedOutput = () => {
 
 	const { user_id, role_id } = useAuth();
 
-	const { data, isLoading, mutate } = useSWR("/videos/output" + video_id, () =>
+	const { data, isLoading, mutate } = useSWR("/videos/output/" + video_id, () =>
 		getProcessedOutputAPI(video_id)
 	);
 
