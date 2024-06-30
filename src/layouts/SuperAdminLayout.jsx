@@ -265,7 +265,7 @@ export default function SuperAdminLayout({
 						</ListItemButton>
 					))}
 				</List>
-				<Stack direction={"row"} justifyContent={"center"} padding={1} mt={10}>
+				<Stack direction={"row"} justifyContent={"center"} padding={1} mt={3}>
 					<Button
 						onClick={handleLogout}
 						variant="contained"

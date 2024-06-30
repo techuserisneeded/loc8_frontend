@@ -65,7 +65,6 @@ const parameters = [
 
 function reduceParams(acc, v) {
 	acc[v.key] = parseFloat(v.weightings);
-
 	return acc;
 }
 
