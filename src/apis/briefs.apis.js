@@ -147,12 +147,13 @@ export async function editUserAPI(
 	return data;
 }
 
-export async function getBudgetDetailsByBudgetIdAPI(budget_id) {
+export async function getBudgetDetailsByBudgetIdAPI(budget_id, filters = {}) {
 	const token = loginUtils.getUser().token;
 
 	const { data } = await axios.get(
 		"briefs/budgets/" + encodeURIComponent(budget_id),
 		{
+			params: filters,
 			headers: {
 				Authorization: token,
 			},

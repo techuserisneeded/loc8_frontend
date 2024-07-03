@@ -22,19 +22,20 @@ import MapView from "./MapView";
 import AddToPlan from "./AddToPlan";
 import PlanList from "./PlanList";
 import QuickViewTable from "./QuickViewTable";
+import AddToWorkSpace from "./AddToWorkSpace";
+import MediaFilters from "./MediaFilters";
+import VideoDataFilters from "./VideoDataFilters";
 
 import {
 	getBudgetDetailsByBudgetIdAPI,
 	finishPlanAPI,
 } from "../../../apis/briefs.apis";
-import { getMediaPlansAPI } from "../../../apis/plans.apis";
+
 import {
 	mapPlanCSVDownload,
 	convertToCSV,
 	getTotal,
 } from "../../../utils/helper.utils";
-import AddToWorkSpace from "./AddToWorkSpace";
-import MediaFilters from "./MediaFilters";
 
 const StyledTooltip = styled(({ className, ...props }) => (
 	<Tooltip {...props} classes={{ popper: className }} />
@@ -64,10 +65,17 @@ const StartPlanning = () => {
 
 	const [isPlanListOpen, setIsPlanListOpen] = useState(false);
 	const [mediaFilterOpen, setmediaFilterOpen] = useState(false);
+	const [videoDataFilterOpen, setvideoDataFilterOpen] = useState(false);
+
 	const [mediaData, setMediaData] = useState([]);
+
 	const [mediaFilter, setmediaFilter] = useState({
 		visibility_duration_min: 0,
 		visibility_duration_max: 0,
+	});
+	const [videoFilter, setvideoFilter] = useState({
+		average_speed_min: 0,
+		average_speed_max: null,
 	});
 
 	const {
@@ -76,8 +84,13 @@ const StartPlanning = () => {
 		error,
 		mutate,
 	} = useSWR(
-		budget_id ? "briefs/budgets/" + budget_id : null,
-		getBudgetDetailsByBudgetIdAPI.bind(this, budget_id)
+		budget_id
+			? "briefs/budgets/" +
+					budget_id +
+					"?" +
+					new URLSearchParams(Object.entries(videoFilter)).toString()
+			: null,
+		getBudgetDetailsByBudgetIdAPI.bind(this, budget_id, videoFilter)
 	);
 
 	// const mediaRespState = useSWR(
@@ -176,6 +189,24 @@ const StartPlanning = () => {
 		setmediaFilterOpen(false);
 	};
 
+	const openVideoFilter = () => {
+		setvideoDataFilterOpen(true);
+	};
+
+	const handleVideoFilterClose = () => {
+		setvideoDataFilterOpen(false);
+	};
+
+	const handleApplyVideoFilter = (filters) => {
+		mutate(
+			"briefs/budgets/" +
+				budget_id +
+				"?" +
+				new URLSearchParams(Object.entries(filters)).toString(),
+			getBudgetDetailsByBudgetIdAPI(budget_id, filters)
+		);
+	};
+
 	const totalAmount = data.plans ? getTotal(data.plans, "total") : 0;
 	const totalCostForDuration = data.plans
 		? getTotal(data.plans, "cost_for_duration")
@@ -267,6 +298,7 @@ const StartPlanning = () => {
 										zone_id={data?.budget?.zone_id}
 										filters={mediaFilter}
 										setfilters={setmediaFilter}
+										closeFilter={handleFilterClose}
 									/>
 								}>
 								<CustomButton
@@ -275,6 +307,34 @@ const StartPlanning = () => {
 									disableElevation
 									onClick={openFilter}>
 									Media Data
+								</CustomButton>
+							</StyledTooltip>
+						</div>
+					</ClickAwayListener>
+
+					<ClickAwayListener onClickAway={handleVideoFilterClose}>
+						<div>
+							<StyledTooltip
+								placement="left-start"
+								onClose={handleVideoFilterClose}
+								open={videoDataFilterOpen}
+								disableFocusListener
+								disableHoverListener
+								disableTouchListener
+								title={
+									<VideoDataFilters
+										filters={videoFilter}
+										setfilters={setvideoFilter}
+										closeFilter={handleVideoFilterClose}
+										onApply={handleApplyVideoFilter}
+									/>
+								}>
+								<CustomButton
+									variant="contained"
+									size="small"
+									disableElevation
+									onClick={openVideoFilter}>
+									Video Data
 								</CustomButton>
 							</StyledTooltip>
 						</div>
