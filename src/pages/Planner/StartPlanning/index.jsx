@@ -71,7 +71,7 @@ const StartPlanning = () => {
 
 	const [mediaFilter, setmediaFilter] = useState({
 		visibility_duration_min: 0,
-		visibility_duration_max: 0,
+		visibility_duration_max: null,
 	});
 	const [videoFilter, setvideoFilter] = useState({
 		average_speed_min: 0,
