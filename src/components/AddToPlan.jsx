@@ -345,7 +345,12 @@ export default function AddToPlan({
 								) : null}
 							</Grid>
 							<Grid item xs={12} sm={12}>
-								<TextField required fullWidth value={locationText} disabled />
+								<TextField
+									required
+									fullWidth
+									value={locationText}
+									onChange={(e) => setLocationText(e.target.value)}
+								/>
 							</Grid>
 							<Grid item xs={12} sm={3}>
 								<TextField
