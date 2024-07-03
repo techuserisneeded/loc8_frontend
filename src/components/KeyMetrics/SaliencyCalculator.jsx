@@ -70,21 +70,11 @@ function reduceParams(acc, v) {
 }
 
 const SaliencyCalculator = ({ setisLoading }) => {
-	const [selectedLevel, setselectedLevel] = useState("city");
-
+	const [iscitychecked, setcitychecked] = useState(true);
+	const [islocationchecked, setlocationchecked] = useState(true);
 	const [selectedArea, setSelectedArea] = useState({});
 	const [frontViewParams, setFrontViewParams] = useState([]);
 	const [rearViewParams, setrearViewParams] = useState([]);
-
-	const handleChange = (v) => {
-		setselectedLevel((prev) => {
-			if (prev === v) {
-				return "";
-			} else {
-				return v;
-			}
-		});
-	};
 
 	const handleAreaChange = (v) => {
 		setSelectedArea(v);
@@ -106,7 +96,7 @@ const SaliencyCalculator = ({ setisLoading }) => {
 			return;
 		}
 
-		if (!selectedLevel) {
+		if (iscitychecked === false && islocationchecked === false) {
 			alert("select the levels, location level or city level.");
 			return;
 		}
@@ -117,7 +107,8 @@ const SaliencyCalculator = ({ setisLoading }) => {
 			zone_id: selectedArea.zone.id,
 			state_id: selectedArea.state.id,
 			city_id: selectedArea.city.id,
-			level: selectedLevel,
+			iscitychecked: iscitychecked,
+			islocationchecked: islocationchecked,
 			front_weightings: frontViewParams.reduce(reduceParams, {}),
 			rear_weightings: rearViewParams.reduce(reduceParams, {}),
 		};
@@ -141,16 +132,18 @@ const SaliencyCalculator = ({ setisLoading }) => {
 					<AreaSelector onChange={handleAreaChange} />
 					<Stack mt={3} direction={"row"} gap={2}>
 						<FormControlLabel
-							checked={selectedLevel === "city"}
+							checked={iscitychecked}
 							control={<Checkbox />}
-							onChange={handleChange.bind(this, "city")}
+							defaultChecked
+							onChange={() => setcitychecked(!iscitychecked)}
 							label="City Level"
 						/>
 						<FormControlLabel
-							checked={selectedLevel === "location"}
+							checked={islocationchecked}
 							control={<Checkbox />}
+							defaultChecked
 							label="Location Level"
-							onChange={handleChange.bind(this, "location")}
+							onChange={() => setlocationchecked(!islocationchecked)}
 						/>
 					</Stack>
 				</Grid>
