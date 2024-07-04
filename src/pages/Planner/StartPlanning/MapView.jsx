@@ -231,7 +231,7 @@ const MapView = ({
 										setActivePopup(plan);
 									},
 								}}
-								icon={createIcon(index + 1)}></Marker>
+								icon={createIcon(plan.sr_no)}></Marker>
 						</React.Fragment>
 					);
 				})}
@@ -269,7 +269,7 @@ function AssetPopUp({
 								style={{
 									width: "100%",
 								}}
-								src="/logo512.png"
+								src={base_url+"/files/images/"+info.site_image}
 								alt="asset"
 							/>
 							<LabelValue label={"Vendor"} value={info.vendor} />

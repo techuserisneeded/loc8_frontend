@@ -343,7 +343,7 @@ const StartPlanning = () => {
 			</Box>
 			<Grid mt={2} spacing={2} container>
 				<Grid md={4} item>
-					<QuickViewTable rows={data.plans} />
+					<QuickViewTable onRemovedPlan={mutate} rows={data.plans} />
 				</Grid>
 				<Grid md={6} item>
 					<Box>
