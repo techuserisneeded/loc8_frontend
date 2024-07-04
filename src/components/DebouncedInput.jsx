@@ -4,7 +4,7 @@ import TextField from "@mui/material/TextField";
 export default function DebouncedInput({
 	value: initialValue,
 	onChange,
-	debounce = 500,
+	debounce = 100,
 	...props
 }) {
 	const [value, setValue] = useState(initialValue);

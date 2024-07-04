@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { APIerrorMessageHandler } from "../../utils/helper.utils";
-import { calculateefficiencyAPI, calculateImpressionAPI } from "../../apis/metrics.apis";
+import {
+  calculateefficiencyAPI,
+  calculateImpressionAPI,
+  estimateImpressionAPI,
+} from "../../apis/metrics.apis";
 import { toast } from "react-toastify";
 import Papa from "papaparse";
 import Stack from "@mui/material/Stack";
@@ -42,26 +46,39 @@ export default function KeyMetrics() {
 
   const handleFileSubmit = async (e) => {
     e.preventDefault();
-    if (data.length == 0) 
-      {
-        alert("Please select a file");
-        return;
-      }
-      setisLoading(true);
-      const body = {
-        data:data
-      }
-      
-      try {
-        await calculateImpressionAPI(body);
-        toast.success("Impression Added successfully!");
-      } catch (error) {
-        APIerrorMessageHandler(error);
-      } finally {
-        setisLoading(false);
+    if (data.length == 0) {
+      alert("Please select a file");
+      return;
+    }
+    setisLoading(true);
+    const body = {
+      data: data,
+    };
+
+    try {
+      await calculateImpressionAPI(body);
+      toast.success("Impression Added successfully!");
+    } catch (error) {
+      APIerrorMessageHandler(error);
+    } finally {
+      setisLoading(false);
     }
   };
 
+  const handleEstimateImpression = async(e) => {
+    e.preventDefault();
+    setisLoading(true);
+    try {
+      await estimateImpressionAPI();
+      toast.success("Impression Estimated successfully!");
+    } catch (error) {
+      APIerrorMessageHandler(error);
+    } finally {
+      setisLoading(false);
+    }
+  }
+
+  
   const toggleState = (index) => {
     setcollapseStates((prev) => {
       const newState = [...prev];
@@ -130,7 +147,7 @@ export default function KeyMetrics() {
               startIcon={<CloudUploadIcon />}
             >
               Upload file
-              <VisuallyHiddenInput type="file" onChange={handleFileChange} />
+              <VisuallyHiddenInput type="file" onChange={handleFileChange}  />
             </Button>
             <Stack
               direction={"row"}
@@ -141,7 +158,12 @@ export default function KeyMetrics() {
                 onClick={handleFileSubmit}
                 sx={{ minWidth: "200px" }}
               >
-                Calculate
+                Add impression
+              </CustomButton>
+            </Stack>
+            <Stack justifyContent={"center"} alignItems={"center"} mt={5}>
+              <CustomButton onClick={handleEstimateImpression} component="label" role={undefined} variant="contained">
+                Estimate Impression
               </CustomButton>
             </Stack>
           </Box>

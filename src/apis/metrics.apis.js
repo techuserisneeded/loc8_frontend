@@ -32,3 +32,13 @@ export async function calculateImpressionAPI(body = {}) {
 	});
 	return data;
 }
+
+export async function estimateImpressionAPI(body = {}) {
+	const token = loginUtils.getUser().token;
+	const { data } = await axios.post("metrics/estimateimpression", body = {}, {
+		headers: {
+			Authorization: token,
+		},
+	});
+	return data;
+}

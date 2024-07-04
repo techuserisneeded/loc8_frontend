@@ -24,9 +24,10 @@ export default function CollapsibleContainer({
 				border: "1px solid rgba(211,211,211,0.6)",
 			}}>
 			<CardHeader
+			    onClick={handleToggle}
 				title={title}
 				action={
-					<IconButton onClick={handleToggle} aria-label="expand" size="small">
+					<IconButton  aria-label="expand" size="small">
 						{open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
 					</IconButton>
 				}></CardHeader>

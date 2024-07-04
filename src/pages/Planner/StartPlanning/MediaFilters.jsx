@@ -10,50 +10,6 @@ import { getMediaPlansAPI } from "../../../apis/plans.apis";
 
 const filterFields = [
 	{
-		label: "Frame Size Range",
-		keys: ["average_areas_min", "average_areas_max"],
-	},
-	{
-		label: "Visibility Duration Range",
-		keys: ["visibility_duration_min", "visibility_duration_max"],
-	},
-	{
-		label: "Near Peripheral Duration Range",
-		keys: ["near_p_duration_min", "near_p_duration_max"],
-	},
-	{
-		label: "Mid Peripheral Duration Range",
-		keys: ["mid_p_duration_min", "mid_p_duration_max"],
-	},
-	{
-		label: "Far Peripheral Duration Range",
-		keys: ["far_p_duration_min", "far_p_duration_max"],
-	},
-	{
-		label: "Dsistance From Center Range",
-		keys: ["distance_to_center_min", "distance_to_center_max"],
-	},
-	{
-		label: "Near Peripheral Distance Range",
-		keys: ["near_p_distance_min", "near_p_distance_max"],
-	},
-	{
-		label: "Mid Peripheral Distance Range",
-		keys: ["mid_p_distance_min", "mid_p_distance_max"],
-	},
-	{
-		label: "Far Peripheral Distance Range",
-		keys: ["far_p_distance_min", "far_p_distance_max"],
-	},
-	{
-		label: "Average Speed Range",
-		keys: ["average_speed_min", "average_speed_max"],
-	},
-	{
-		label: "Length Of Stretch Range",
-		keys: ["length_of_stretch_min", "length_of_stretch_max"],
-	},
-	{
 		label: "Vendor Name",
 		type: "text",
 		keys: ["vendor_name"],
@@ -84,6 +40,94 @@ const filterFields = [
 	{
 		label: "Total Cost Range",
 		keys: ["total_cost_min", "total_cost_max"],
+	},
+	{
+		label:"Visibility Duration",
+		keys:["visibility_duration_min", "visibility_duration_max"],
+	},
+	{
+		label: "Average Speed Range",
+		keys: ["average_speed_min", "average_speed_max"],
+	},
+	{
+		label: "Front Saliency Score City",
+		keys:['front_saliency_score_city_min','front_saliency_score_city_max']
+	},
+	{
+		label: "Rear Saliency Score City",
+		keys:['rear_saliency_score_city_min','rear_saliency_score_city_max']
+	},
+	{
+		label: "Net Saliency Score City",
+		keys:['net_saliency_score_city_min','net_saliency_score_city_max']
+	},
+	{
+		label: "Impressions",
+		keys: ['impressions_min','impressions_max']
+	},
+	{
+		label: "Effective Impressions",
+		keys:['effective_impressions_min','effective_impressions_max']
+	},
+	{
+		label: "Efficiency",
+		keys:['efficiency_min','efficiency_max']
+	},
+	{
+		label: "TOP Area",
+		keys:['top_area']
+	},
+	{
+		label: "TOP Average Speed",
+		keys:['top_average_speed']
+	},
+	{
+		label: "Top Display Cost Per Month",
+		keys:['top_display_cost_per_month']
+	},
+	{
+		label: "Top Total Cost",
+		keys:['top_total_cost']
+	},
+	{
+		label: "Top Visibility Duration",
+		keys:['top_visibility_duration']
+	},
+	{
+		label: "Top Front Saliency Citywise",
+		keys:['top_front_saliency_citywise']
+	},
+	{
+		label: "Top Rear Saliency Citywise",
+		keys:['top_rear_saliency_citywise']
+	},
+	{
+		label: "Top Net Saliency Citywise",
+		keys:['top_net_saliency_citywise']
+	},
+	{
+		label: "Top Front Saliency Location",
+		keys:['top_front_saliency_locationwise']
+	},
+	{
+		label: "Top Rear Saliency Location",
+		keys:['top_rear_saliency_locationwise']
+	},
+	{
+		label: "Top Net Saliency Location",
+		keys:['top_net_saliency_location']
+	},
+	{
+		label: "Top Impressions",
+		keys:['top_impressions']
+	},
+	{
+		label: "Top Effective Impressions",
+		keys:['top_effective_impressions']
+	},
+	{
+		label: "Top Efficiency",
+		keys:['top_efficiency']
 	},
 ];
 
@@ -173,13 +217,13 @@ const MediaFilters = ({
 					);
 				})}
 			</Stack>
-			<Stack direction={"row"} spacing={2} justifyContent={"flex-end"}>
-				<CustomButton
+			<Stack direction={"row"} spacing={2} mb={5} justifyContent={"center"}>
+				<CustomButton size="large"
 					sx={{ bgcolor: "blue", color: "white" }}
 					onClick={handleClear}>
 					Clear
 				</CustomButton>
-				<CustomButton onClick={applyFilter}>Apply</CustomButton>
+				<CustomButton size="large" onClick={applyFilter} >Apply</CustomButton>
 			</Stack>
 		</Box>
 	);
