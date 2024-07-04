@@ -303,38 +303,13 @@ const StartPlanning = () => {
 					width={"80%"}
 					alignItems={"center"}
 					gap={2}>
-					<ClickAwayListener onClickAway={handleFilterClose}>
-						<div>
-							<StyledTooltip
-								placement="bottom-start"
-								onClose={handleFilterClose}
-								open={mediaFilterOpen}
-								disableFocusListener
-								disableHoverListener
-								disableTouchListener
-								title={
-									<MediaFilters
-										setisLoaderOpen={setisLoaderOpen}
-										setMediaData={setMediaData}
-										plans={data?.plans}
-										city_id={data?.budget?.city_id}
-										state_id={data?.budget?.state_id}
-										zone_id={data?.budget?.zone_id}
-										filters={mediaFilter}
-										setfilters={setmediaFilter}
-										closeFilter={handleFilterClose}
-									/>
-								}>
-								<CustomButton
-									variant="contained"
-									size="small"
-									disableElevation
-									onClick={openFilter}>
-									Media Data
-								</CustomButton>
-							</StyledTooltip>
-						</div>
-					</ClickAwayListener>
+					<CustomButton
+						variant="contained"
+						size="small"
+						disableElevation
+						onClick={openFilter}>
+						Media Data
+					</CustomButton>
 
 					<ClickAwayListener onClickAway={handleVideoFilterClose}>
 						<div>
@@ -432,6 +407,20 @@ const StartPlanning = () => {
 				</Grid>
 			</Grid>
 			<Loader open={isLoading || isLoaderOpen} />
+
+			<MediaFilters
+				open={mediaFilterOpen}
+				setisLoaderOpen={setisLoaderOpen}
+				setMediaData={setMediaData}
+				plans={data?.plans}
+				city_id={data?.budget?.city_id}
+				state_id={data?.budget?.state_id}
+				zone_id={data?.budget?.zone_id}
+				filters={mediaFilter}
+				setfilters={setmediaFilter}
+				closeFilter={handleFilterClose}
+			/>
+
 			<AddToPlan
 				open={addToPlanState.isOpen}
 				videoId={addToPlanState.video_id}
