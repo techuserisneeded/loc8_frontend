@@ -186,7 +186,7 @@ const MediaFilters = ({
 	};
 
 	return (
-		<Box width={"100%"} padding={1}>
+		<Box padding={1} sx={{ height: '100vh', overflowY: 'auto' }}>
 			<Stack m={2} direction={"row"} flexWrap={"wrap"} gap={2}>
 				{filterFields.map((v) => {
 					const minKey = v.keys[0];
