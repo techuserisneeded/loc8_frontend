@@ -139,11 +139,6 @@ const MapView = ({
 	const planData = plans?.filter((v) => v.latitude && v.longitude) || [];
 	const billIdsInPlans = planData.map((v) => v.id);
 
-	const bills =
-		billboards?.filter(
-			(v) => v.latitude && v.longitude && !billIdsInPlans.includes(v.id)
-		) || [];
-
 	useEffect(() => {
 		const center = mapRef?.current?.getCenter();
 		if (!center) {
@@ -206,7 +201,7 @@ const MapView = ({
 						);
 					})}
 
-				{bills.map((bil, index) => {
+				{billboards.map((bil, index) => {
 					return (
 						<React.Fragment key={bil.id}>
 							<Marker
@@ -269,7 +264,7 @@ function AssetPopUp({
 								style={{
 									width: "100%",
 								}}
-								src={base_url+"/files/images/"+info.site_image}
+								src={base_url + "/files/images/" + info.site_image}
 								alt="asset"
 							/>
 							<LabelValue label={"Vendor"} value={info.vendor} />

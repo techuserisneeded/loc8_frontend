@@ -31,10 +31,13 @@ import {
 	finishPlanAPI,
 } from "../../../apis/briefs.apis";
 
+import { addAssetsToPlan } from "../../../apis/plans.apis";
+
 import {
 	mapPlanCSVDownload,
 	convertToCSV,
 	getTotal,
+	APIerrorMessageHandler,
 } from "../../../utils/helper.utils";
 
 const StyledTooltip = styled(({ className, ...props }) => (
@@ -43,7 +46,7 @@ const StyledTooltip = styled(({ className, ...props }) => (
 	[`& .${tooltipClasses.tooltip}`]: {
 		backgroundColor: "#fff",
 		color: "rgba(0, 0, 0, 0.87)",
-		maxWidth: 800,
+		maxWidth: "90%",
 		fontSize: theme.typography.pxToRem(12),
 		border: "1px solid #dadde9",
 	},
@@ -207,6 +210,26 @@ const StartPlanning = () => {
 		);
 	};
 
+	const handleAddBulkMedia = async () => {
+		try {
+			setisLoaderOpen(true);
+
+			await addAssetsToPlan({
+				billboards: mediaData.map((v) => v.id),
+				brief_id: data?.budget?.brief_id,
+				budget_id,
+			});
+
+			mutate();
+
+			toast.success("Added to plan!");
+		} catch (error) {
+			APIerrorMessageHandler(error);
+		} finally {
+			setisLoaderOpen(false);
+		}
+	};
+
 	const totalAmount = data.plans ? getTotal(data.plans, "total") : 0;
 	const totalCostForDuration = data.plans
 		? getTotal(data.plans, "cost_for_duration")
@@ -283,7 +306,7 @@ const StartPlanning = () => {
 					<ClickAwayListener onClickAway={handleFilterClose}>
 						<div>
 							<StyledTooltip
-								placement="left-start"
+								placement="bottom-start"
 								onClose={handleFilterClose}
 								open={mediaFilterOpen}
 								disableFocusListener
@@ -293,6 +316,7 @@ const StartPlanning = () => {
 									<MediaFilters
 										setisLoaderOpen={setisLoaderOpen}
 										setMediaData={setMediaData}
+										plans={data?.plans}
 										city_id={data?.budget?.city_id}
 										state_id={data?.budget?.state_id}
 										zone_id={data?.budget?.zone_id}
@@ -339,6 +363,16 @@ const StartPlanning = () => {
 							</StyledTooltip>
 						</div>
 					</ClickAwayListener>
+
+					<CustomButton
+						variant="contained"
+						size="small"
+						disableElevation
+						sx={{ bgcolor: "green", color: "white" }}
+						onClick={handleAddBulkMedia}
+						disabled={!mediaData.length}>
+						Add Bulk
+					</CustomButton>
 				</Stack>
 			</Box>
 			<Grid mt={2} spacing={2} container>

@@ -20,9 +20,6 @@ import { deletePlanById } from "../../../apis/plans.apis";
 function TableHeadCell(params) {
 	return <TableCell sx={{ fontWeight: "600" }} {...params} />;
 }
-const handleClick = (e) => {
-	alert("Clicked");
-};
 
 const QuickViewTable = ({ rows = [], onRemovedPlan }) => {
 	const [isLoading, setisLoading] = useState(false);

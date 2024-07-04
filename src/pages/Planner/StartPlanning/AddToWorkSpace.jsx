@@ -50,6 +50,9 @@ export default function AddToWorkSpace({
 		() => getProcessedOutputAPI(videoId)
 	);
 
+	const filteredBillboards =
+		data?.billboards?.filter((v) => v.latitude && v.longitude) || [];
+
 	const handleClose = () => {
 		onClose(false);
 	};
@@ -69,10 +72,10 @@ export default function AddToWorkSpace({
 	};
 
 	const toggleCheckAll = () => {
-		if (selectedBills.length === data?.billboards?.length) {
+		if (selectedBills.length === filteredBillboards.length) {
 			setSelectedBills([]);
 		} else {
-			setSelectedBills(data?.billboards?.map((v) => v.id));
+			setSelectedBills(filteredBillboards?.map((v) => v.id));
 		}
 	};
 
@@ -136,7 +139,7 @@ export default function AddToWorkSpace({
 											size="small"
 											onChange={toggleCheckAll}
 											checked={
-												selectedBills.length === data?.billboards?.length
+												selectedBills.length === filteredBillboards?.length
 											}
 										/>
 									</TableCell>
@@ -159,7 +162,7 @@ export default function AddToWorkSpace({
 							</TableRow>
 						</TableHead>
 						<TableBody>
-							{data?.billboards?.map((row) => (
+							{filteredBillboards?.map((row) => (
 								<TableRow
 									key={row.id}
 									sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>

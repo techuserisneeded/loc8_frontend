@@ -94,6 +94,7 @@ const MediaFilters = ({
 	setisLoaderOpen,
 	setMediaData,
 	filters,
+	plans = [],
 	setfilters,
 	closeFilter,
 }) => {
@@ -121,7 +122,16 @@ const MediaFilters = ({
 				...filters,
 			});
 
-			setMediaData(data);
+			const planData = plans?.filter((v) => v.latitude && v.longitude) || [];
+
+			const billIdsInPlans = planData.map((v) => v.id);
+
+			const bills =
+				data?.filter(
+					(v) => v.latitude && v.longitude && !billIdsInPlans.includes(v.id)
+				) || [];
+
+			setMediaData(bills);
 			closeFilter();
 		} catch (error) {
 			console.log(error);
@@ -132,7 +142,7 @@ const MediaFilters = ({
 	};
 
 	return (
-		<Box padding={1}>
+		<Box width={"100%"} padding={1}>
 			<Stack m={2} direction={"row"} flexWrap={"wrap"} gap={2}>
 				{filterFields.map((v) => {
 					const minKey = v.keys[0];
