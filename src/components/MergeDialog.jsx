@@ -11,10 +11,10 @@ import Paper from "@mui/material/Paper";
 import Checkbox from "@mui/material/Checkbox";
 import { Stack } from "@mui/material";
 
-import CustomButton from "../../components/CustomButton";
-import ModalContainer from "../../components/ModalContainer";
+import CustomButton from "./CustomButton";
+import ModalContainer from "./ModalContainer";
 
-import { mergeBillboardsAPI } from "../../apis/videos.apis";
+import { mergeBillboardsAPI } from "../apis/videos.apis";
 
 const MergeDialog = ({ open, onClose, rows = [], onMerge }) => {
 	const [selectedId, setSelectedId] = useState(null);
@@ -81,7 +81,7 @@ const MergeDialog = ({ open, onClose, rows = [], onMerge }) => {
 							<TableCell>Media Type</TableCell>
 							<TableCell>Illumination</TableCell>
 							<TableCell>Area</TableCell>
-							<TableCell>Display Cost Per Month</TableCell>
+							<TableCell>Cost Of Duration</TableCell>
 							<TableCell>Total Cost</TableCell>
 						</TableRow>
 					</TableHead>
@@ -107,7 +107,7 @@ const MergeDialog = ({ open, onClose, rows = [], onMerge }) => {
 										<TableCell>{row.media_type}</TableCell>
 										<TableCell>{row.illumination}</TableCell>
 										<TableCell>{row.area}</TableCell>
-										<TableCell>{row.display_cost_per_month}</TableCell>
+										<TableCell>{row.cost_for_duration}</TableCell>
 										<TableCell>{row.total_cost}</TableCell>
 									</TableRow>
 							  ))

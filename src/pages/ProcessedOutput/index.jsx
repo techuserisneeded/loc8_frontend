@@ -18,6 +18,7 @@ import useAuth from "../../hooks/useAuth";
 
 const ProcessedOutput = () => {
 	const { video_id } = useParams();
+
 	const [assetInfoState, setAssetInfoState] = useState({
 		isOpen: false,
 		assetId: null,
@@ -84,6 +85,7 @@ const ProcessedOutput = () => {
 						videoId={data?.video_details?.video_id}
 						isAuthorized={isAuthorizedForActions}
 						onAddAssetInfo={openAssetInfo}
+						onMergeSuccess={mutate}
 					/>
 
 					<Typography my={2} variant="h6" mb={1}>

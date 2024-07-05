@@ -12,12 +12,9 @@ import Checkbox from "@mui/material/Checkbox";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 
 import Loader from "../../components/Loader";
+import MergeDialog from "../../components/MergeDialog";
 
-import {
-	mergeBillboardsAPI,
-	deleteBillboardsAPI,
-	deleteVideosAPI,
-} from "../../apis/videos.apis";
+import { deleteBillboardsAPI, deleteVideosAPI } from "../../apis/videos.apis";
 import { Button, IconButton } from "@mui/material";
 
 export default function BillboardTable({
@@ -26,48 +23,35 @@ export default function BillboardTable({
 	videoId,
 	isAuthorized,
 	onAddAssetInfo,
+	onMergeSuccess,
 }) {
 	const [selectedBills, setSelectedBills] = useState([]);
 	const [isLoading, setisLoading] = useState(false);
+	const [mergeSate, setMergeSate] = useState({
+		isOpen: false,
+		rows: [],
+	});
 
-	const isChecked = (id) => selectedBills.includes(id);
+	const isChecked = (id) => selectedBills.findIndex((v) => v.id === id) > -1;
 
-	const handleCheckboxChange = (id) => {
-		if (selectedBills.includes(id)) {
+	const handleCheckboxChange = (row) => {
+		const isBillAlreadyPresent =
+			selectedBills.findIndex((v) => v.id === row.id) > -1;
+
+		if (isBillAlreadyPresent) {
 			setSelectedBills((prev) => {
-				return prev.filter((preId) => preId !== id);
+				return prev.filter((b) => b.id !== row.id);
 			});
 
 			return;
 		}
 
-		setSelectedBills((prev) => [...prev, id]);
+		setSelectedBills((prev) => [...prev, row]);
 	};
 
 	const handleSelectAll = (e) => {
 		const isChecked = e.target.checked;
-		setSelectedBills(isChecked ? data.map((v) => v.id) : []);
-	};
-
-	const handleMerge = () => {
-		if (!window.confirm("Are you sure you want to merge?!")) {
-			return;
-		}
-
-		setisLoading(true);
-		mergeBillboardsAPI(selectedBills)
-			.then((v) => {
-				toast.success("Merge Successfull!!");
-				onMerge?.();
-				setSelectedBills([]);
-			})
-			.catch((e) => {
-				console.log(e);
-				toast.error("Something went wrong!");
-			})
-			.finally((v) => {
-				setisLoading(false);
-			});
+		setSelectedBills(isChecked ? data.map((v) => v) : []);
 	};
 
 	const handleDelete = () => {
@@ -120,6 +104,26 @@ export default function BillboardTable({
 			});
 	};
 
+	const openMergeDialog = () => {
+		setMergeSate({
+			isOpen: true,
+			rows: selectedBills,
+		});
+	};
+
+	const handleMergeDialogClose = () => {
+		setMergeSate({
+			isOpen: false,
+			rows: [],
+		});
+
+		setSelectedBills([]);
+	};
+
+	const handleMergeSucess = () => {
+		onMergeSuccess?.();
+	};
+
 	return (
 		<TableContainer component={Paper}>
 			{isAuthorized ? (
@@ -129,7 +133,7 @@ export default function BillboardTable({
 						size="small"
 						disableElevation
 						sx={{ margin: "15px" }}
-						onClick={handleMerge}
+						onClick={openMergeDialog}
 						disabled={selectedBills.length < 2}>
 						Merge Selected
 					</Button>
@@ -189,7 +193,7 @@ export default function BillboardTable({
 							<TableCell>
 								<Checkbox
 									size="small"
-									onChange={handleCheckboxChange.bind(this, row.id)}
+									onChange={handleCheckboxChange.bind(this, row)}
 									checked={isChecked(row.id)}
 								/>
 							</TableCell>
@@ -222,6 +226,12 @@ export default function BillboardTable({
 					))}
 				</TableBody>
 			</Table>
+			<MergeDialog
+				open={mergeSate.isOpen}
+				rows={mergeSate.rows}
+				onClose={handleMergeDialogClose}
+				onMerge={handleMergeSucess}
+			/>
 			<Loader open={isLoading} />
 		</TableContainer>
 	);

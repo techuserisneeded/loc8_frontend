@@ -62,7 +62,7 @@ import {
 import { Stack, TextField } from "@mui/material";
 import ASearchFilter from "./ASearchFilter";
 import base_url from "../../constants/base_url";
-import MergeDialog from "./MergeDialog";
+import MergeDialog from "../../components/MergeDialog";
 
 const columnHelper = createColumnHelper();
 
@@ -204,8 +204,8 @@ const columns = [
 		header: "area",
 	}),
 
-	columnHelper.accessor("display_cost_per_month", {
-		header: "Display Cost Per Month",
+	columnHelper.accessor("cost_for_duration", {
+		header: "Cost For Duration",
 	}),
 
 	columnHelper.accessor("total_cost", {

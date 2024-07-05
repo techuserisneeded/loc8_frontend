@@ -19,6 +19,7 @@ import { Stack, Grid, TextField } from "@mui/material";
 
 import { addAssetInfoAPI } from "../apis/videos.apis";
 import { getColorBasedOnSpeed } from "../utils/helper.utils";
+import base_url from "../constants/base_url";
 import Loader from "./Loader";
 
 import "leaflet/dist/leaflet.css";
@@ -233,7 +234,10 @@ export default function AddToPlan({
 		}
 
 		if (row.latitude) {
-			setcoords({ lat: row.latitude, long: row.longitude });
+			setcoords({
+				lat: parseFloat(row.latitude),
+				long: parseFloat(row.longitude),
+			});
 		}
 	}, [row.location, row.latitude, row.longitude]);
 
@@ -345,7 +349,12 @@ export default function AddToPlan({
 								) : null}
 							</Grid>
 							<Grid item xs={12} sm={12}>
-								<TextField required fullWidth value={locationText} onChange={(e) => setLocationText(e.target.value)} />
+								<TextField
+									required
+									fullWidth
+									value={locationText}
+									onChange={(e) => setLocationText(e.target.value)}
+								/>
 							</Grid>
 							<Grid item xs={12} sm={3}>
 								<TextField
@@ -537,6 +546,19 @@ export default function AddToPlan({
 							</Grid>
 							<Grid sm={12} item>
 								<Box mt={3}>
+									{formState.site_image ? (
+										<>
+											<Typography variant="h6">Previous Site Image</Typography>
+											<img
+												style={{
+													width: "200px",
+													height: "200px",
+												}}
+												src={base_url + "files/images/" + formState.site_image}
+												alt="asset"
+											/>
+										</>
+									) : null}
 									<div
 										style={{
 											border: "1px dashed #333",
@@ -566,6 +588,19 @@ export default function AddToPlan({
 							</Grid>
 							<Grid sm={12} item>
 								<Box mt={3}>
+									{formState.map_image ? (
+										<>
+											<Typography variant="h6">Previous Map Image</Typography>
+											<img
+												style={{
+													width: "200px",
+													height: "200px",
+												}}
+												src={base_url + "files/images/" + formState.map_image}
+												alt="asset"
+											/>
+										</>
+									) : null}
 									<div
 										style={{
 											border: "1px dashed #333",
@@ -622,6 +657,10 @@ function LocationPicker({ setPosition, position }) {
 			setpos(v.latlng);
 		},
 	});
+
+	React.useEffect(() => {
+		setpos({ lat: position.lat, lng: position.long });
+	}, [position]);
 
 	if (!pos) {
 		return null;
