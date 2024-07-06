@@ -19,8 +19,10 @@ import DebouncedInput from "../../../components/DebouncedInput";
 import CustomButton from "../../../components/CustomButton";
 
 import { getMediaPlansAPI } from "../../../apis/plans.apis";
+import MultiSearch from "./MultiSearch";
 
-const filterFields = [
+
+const MultiSearchfield = [
 	{
 		label: "Vendor Name",
 		type: "text",
@@ -41,6 +43,9 @@ const filterFields = [
 		type: "text",
 		keys: ["illumination"],
 	},
+]
+
+const filterFields = [
 	{
 		label: "Area Range",
 		keys: ["area_min", "area_max"],
@@ -86,12 +91,8 @@ const filterFields = [
 		keys: ["efficiency_min", "efficiency_max"],
 	},
 	{
-		label: "TOP Area",
+		label: "Top Area",
 		keys: ["top_area"],
-	},
-	{
-		label: "TOP Average Speed",
-		keys: ["top_average_speed"],
 	},
 	{
 		label: "Top Display Cost Per Month",
@@ -147,6 +148,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
 });
 
+
+
 const MediaFilters = ({
 	city_id,
 	state_id,
@@ -163,6 +166,8 @@ const MediaFilters = ({
 		closeFilter();
 	};
 
+	
+
 	const handleChangeFilter = (key, value) => {
 		setfilters((v) => {
 			const f = { ...v };
@@ -174,10 +179,30 @@ const MediaFilters = ({
 	const handleClear = () => {
 		setfilters({});
 		setMediaData([]);
+		setMultiSearchtext([
+			[{value:""}],
+		[{value:""}],
+		[{value:""}],
+		[{value:""}],
+		])
 		closeFilter();
 	};
 
+	const [MultiSearchtext, setMultiSearchtext] = useState([
+		[{value:""}],
+		[{value:""}],
+		[{value:""}],
+		[{value:""}],
+	])
+
+	const handleChildChange = (groupIndex, updatedFields) => {
+		const newSearchGroups = [...MultiSearchtext];
+		newSearchGroups[groupIndex] = updatedFields;
+		setMultiSearchtext(newSearchGroups);
+	  };
+
 	const applyFilter = async () => {
+		
 		try {
 			setisLoaderOpen(true);
 			const data = await getMediaPlansAPI({
@@ -185,6 +210,7 @@ const MediaFilters = ({
 				state_id,
 				zone_id,
 				...filters,
+				...MultiSearchtext,
 			});
 
 			const planData = plans?.filter((v) => v.latitude && v.longitude) || [];
@@ -197,6 +223,7 @@ const MediaFilters = ({
 				) || [];
 
 			setMediaData(bills);
+			toast.success("Filtered Assets:" + bills.length);
 			closeFilter();
 		} catch (error) {
 			console.log(error);
@@ -227,7 +254,19 @@ const MediaFilters = ({
 						</Typography>
 					</Toolbar>
 				</AppBar>
-				<Box padding={1} sx={{ height: "100vh", overflowY: "auto" }}>
+				<Box padding={1}>
+				<Stack m={2} direction={"row"} flexWrap={"wrap"} gap={2}>
+					{
+						MultiSearchfield.map((v,index) => {
+							return (
+							<MultiSearch label={v.label} key={v.keys} searchFields={MultiSearchtext[index] }
+							setSearchFields={(updatedFields) => handleChildChange(index, updatedFields)} />
+							)
+						}
+					)}
+				</Stack>
+				</Box>
+				<Box padding={1}>
 					<Stack m={2} direction={"row"} flexWrap={"wrap"} gap={2}>
 						{filterFields.map((v) => {
 							const minKey = v.keys[0];

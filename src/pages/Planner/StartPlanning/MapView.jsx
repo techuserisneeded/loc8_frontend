@@ -267,7 +267,7 @@ function AssetPopUp({
 								src={base_url + "/files/images/" + info.site_image}
 								alt="asset"
 							/>
-							<LabelValue label={"Vendor"} value={info.vendor} />
+							<LabelValue label={"Vendor"} value={info.vendor_name} />
 							<LabelValue label={"Illumination"} value={info.illumination} />
 						</Grid>
 						<Grid md={6} item>
@@ -281,7 +281,7 @@ function AssetPopUp({
 								<Stack justifyContent={"space-between"} direction={"row"}>
 									<LabelValue
 										label={"Display Cost Per Month"}
-										value={info.display_cost_per_month}
+										value={info.rental_per_month}
 									/>
 									<LabelValue
 										label={"Printing Cost"}

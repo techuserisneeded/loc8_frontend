@@ -230,7 +230,7 @@ const StartPlanning = () => {
 		}
 	};
 
-	const totalAmount = data.plans ? getTotal(data.plans, "total") : 0;
+	const totalAmount = data.plans ? getTotal(data.plans, "total_cost") : 0;
 	const totalCostForDuration = data.plans
 		? getTotal(data.plans, "cost_for_duration")
 		: 0;
@@ -251,7 +251,7 @@ const StartPlanning = () => {
 		? getTotal(data.plans, "rental_per_month")
 		: 0;
 
-	const totalUnits = data.plans ? getTotal(data.plans, "units") : 0;
+	const totalUnits = data.plans ? data.plans.length : 0
 
 	return (
 		<SuperAdminLayout activeLink={"/"}>
