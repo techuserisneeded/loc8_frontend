@@ -26,6 +26,7 @@ import AreaSelector from "./AreaSelector";
 import CustomButton from "./CustomButton";
 
 import "react-datepicker/dist/react-datepicker.css";
+import base_url from "../constants/base_url";
 
 export const defaultBudget = {
 	zone: {},
@@ -206,7 +207,7 @@ const BriefForm = ({
 			return;
 		}
 
-		if (!formState.brandLogo) {
+		if (!formState.brandLogo && !formState.brand_logo) {
 			toast.error("Please select brand logo!");
 			return;
 		}
@@ -234,6 +235,7 @@ const BriefForm = ({
 			`budgets`,
 			JSON.stringify(
 				budgets.map((item) => ({
+					budget_id: item.budget_id,
 					zone_id: item.zone.zone_id,
 					state_id: item.state.state_id,
 					city_id: item.city.city_id,
@@ -329,6 +331,24 @@ const BriefForm = ({
 										</Grid>
 
 										<Box mt={3}>
+											{formState.brand_logo ? (
+												<>
+													<Typography variant="h6">
+														Previously Uploaded Brand Logo
+													</Typography>
+													<img
+														style={{
+															width: "200px",
+															height: "200px",
+														}}
+														src={
+															base_url + "files/images/" + formState.brand_logo
+														}
+														alt="asset"
+													/>
+												</>
+											) : null}
+
 											<div
 												style={{
 													border: "1px dashed #333",
@@ -337,6 +357,7 @@ const BriefForm = ({
 												}}
 												{...getRootProps()}>
 												<input {...getInputProps()} />
+
 												{isDragActive ? (
 													<p>Drop the brand logo here ...</p>
 												) : (

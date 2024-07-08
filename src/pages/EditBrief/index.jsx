@@ -34,8 +34,11 @@ import SuperAdminLayout from "../../layouts/SuperAdminLayout";
 
 import {
 	createBrief,
+	editBrief,
 	getBriefDetailsByBriefIdAPI,
 } from "../../apis/briefs.apis";
+
+import { APIerrorMessageHandler } from "../../utils/helper.utils";
 
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -82,6 +85,7 @@ const EditBrief = () => {
 		brand: data?.brand_name || "",
 		targetAud: data?.target_audience || "",
 		campObj: data?.campaign_obj || "",
+		brand_logo: data?.brand_logo || "",
 		brandLogo: null,
 	};
 
@@ -194,15 +198,11 @@ const EditBrief = () => {
 
 	const handleSubmit = async (fd) => {
 		try {
-			// await createBrief(fd);
-			// toast.success("Created Successfully!");
-			// navigate("/");
+			fd.append("old_image", data.brand_logo);
+			await editBrief(data.brief_id, fd);
+			toast.success("updated Successfully!");
 		} catch (e) {
-			// let msg = "Something went wrong!";
-			// if (e.response && e.response?.data?.message) {
-			// 	msg = e.response?.data?.message;
-			// }
-			// toast.error(msg);
+			APIerrorMessageHandler(e);
 		}
 	};
 

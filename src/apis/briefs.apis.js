@@ -119,6 +119,19 @@ export async function createBrief(formData) {
 	return data;
 }
 
+export async function editBrief(brief_id, formData) {
+	const token = loginUtils.getUser().token;
+
+	const { data } = await axios.put("briefs/briefs/" + brief_id, formData, {
+		headers: {
+			Authorization: token,
+			"Content-Type": "multipart/form-data",
+		},
+	});
+
+	return data;
+}
+
 export async function editUserAPI(
 	user_id,
 	body = {
