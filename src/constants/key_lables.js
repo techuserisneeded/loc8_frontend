@@ -7,8 +7,14 @@ const key_labels = {
 	illumination: "Illumination",
 	width: "Width",
 	height: "Height",
-	units: "Units",
-	total_area: "Total Area",
+	quantity: "Quantity",
+	area:"Size",
+	vendor_name: "Vendor Name",
+	Rank_net_saliency_citywise:"Rank Net Saliency Citywise",
+	rank_net_saliency_locationwise: "Rank Net Saliency Locationwise",
+	efficiency: "Efficiency",
+	effective_impression:"Effective Impression",
+	visibility_duration:"visibility Duration",
 	duration: "Duration",
 	imp_per_month: "Impression Per Month",
 	rental_per_month: "Rental Price per Month",
@@ -17,7 +23,8 @@ const key_labels = {
 	mountig_rate: "Mounting Rate",
 	printing_cost: "Printing Cost",
 	mounting_cost: "Mounting Cost",
-	total: "Total Cost",
+	impression: "Impression",
+	total_cost: "Total Cost",
 };
 
 export default key_labels;

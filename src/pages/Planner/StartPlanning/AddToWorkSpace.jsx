@@ -34,6 +34,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
 });
 
+
 export default function AddToWorkSpace({
 	open,
 	onClose,
@@ -56,6 +57,7 @@ export default function AddToWorkSpace({
 	const handleClose = () => {
 		onClose(false);
 	};
+
 
 	const isChecked = (id) => selectedBills.includes(id);
 
@@ -100,7 +102,6 @@ export default function AddToWorkSpace({
 			setsaving(false);
 		}
 	};
-console.log(filteredBillboards)
 	return (
 		<React.Fragment>
 			<Dialog
@@ -145,20 +146,29 @@ console.log(filteredBillboards)
 									</TableCell>
 								</TableCell>
 								<TableCell>Location</TableCell>
-								<TableCell align="right">Illumination</TableCell>
 								<TableCell align="right">Media Type</TableCell>
+								<TableCell align="right">Vendor Name</TableCell>
+								<TableCell align="right">Illumination</TableCell>
 								<TableCell align="right">Width</TableCell>
 								<TableCell align="right">Height</TableCell>
 								<TableCell align="right">Qty</TableCell>
-								<TableCell align="right">Effective Impressions</TableCell>
 								<TableCell align="right">Size</TableCell>
 								<TableCell align="right">Duration</TableCell>
-								<TableCell align="right">Impression Per Month</TableCell>
 								<TableCell align="right">Rental Per Month In Lakhs</TableCell>
 								<TableCell align="right">Cost For Duration in Lakhs</TableCell>
-								<TableCell align="right">Net Saliency Score</TableCell>
-								<TableCell align="right">Efficiency</TableCell>
+								<TableCell align="right">Printing Cost</TableCell>
+								<TableCell align="right">Mounting Cost</TableCell>
 								<TableCell align="right">Total in Lakhs</TableCell>
+								
+								<TableCell align="right">Visibility Duration</TableCell>
+								<TableCell align="right">Net Saliency Rank Location</TableCell>
+								<TableCell align="right">Net Saliency Rank City</TableCell>
+								<TableCell align="right">Efficiency</TableCell>
+								<TableCell align="right">Effective Impressions</TableCell>
+								<TableCell align="right">Impression Per Month</TableCell>
+								<TableCell align="right">CPM</TableCell>
+								
+								
 							</TableRow>
 						</TableHead>
 						<TableBody>
@@ -178,31 +188,44 @@ console.log(filteredBillboards)
 										{row.location}
 									</TableCell>
 									<TableCell component="th" scope="row">
-										{row.illumination}
+										{row.media_type}
 									</TableCell>
-									<TableCell align="right">{row.media_type}</TableCell>
+									<TableCell align="right">{row.vendor_name}</TableCell>
+									<TableCell align="right">{row.illumination}</TableCell>
+									
 									<TableCell align="right">{row.width}</TableCell>
 									<TableCell align="right">{row.height}</TableCell>
 									<TableCell align="right">{row.quantity}</TableCell>
-									<TableCell align="right">{(row.effective_impression)}</TableCell>
 									<TableCell align="right">{row.area}</TableCell>
 									<TableCell align="right">{row.duration}</TableCell>
-									<TableCell align="right">{row.imp_per_month}</TableCell>
-									<TableCell align="right">
-										{(row.rental_per_month/100000).toFixed(2)}
-									</TableCell>
+									<TableCell align="right">{(row.rental_per_month/100000).toFixed(2)}</TableCell>
 									<TableCell align="right">
 										{(row.cost_for_duration/100000).toFixed(2)}
 									</TableCell>
 									<TableCell align="right">
-										{row.net_saliency_score_city.toFixed(2)}
+										{(row.printing_cost/100000).toFixed(2)}
 									</TableCell>
 									<TableCell align="right">
-										{row.efficiency.toFixed(2)}
+										{(row.mounting_cost/100000).toFixed(2)}
 									</TableCell>
 									<TableCell align="right">
 										{(row.total_cost/100000).toFixed(2)}
 									</TableCell>
+									<TableCell align="right">
+										{row.visibility_duration}
+									</TableCell>
+									<TableCell align="right">
+										{row.rank_net_saliency_locationwise}
+									</TableCell>
+									<TableCell align="right">
+										{row.Rank_net_saliency_citywise}
+									</TableCell>
+									<TableCell align="right">
+										{row.efficiency.toFixed(2)}
+									</TableCell>
+									<TableCell align="right">{(row.effective_impression)}</TableCell>
+									<TableCell align="right">{row.imp_per_month}</TableCell>
+									<TableCell align="right">{row.total_cost/(row.effective_impression)}</TableCell>
 								</TableRow>
 							))}
 						</TableBody>
