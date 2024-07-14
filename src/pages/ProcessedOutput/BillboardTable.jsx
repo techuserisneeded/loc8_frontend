@@ -64,7 +64,7 @@ export default function BillboardTable({
 		}
 
 		setisLoading(true);
-		deleteBillboardsAPI(selectedBills)
+		deleteBillboardsAPI(selectedBills.map((v) => v.id))
 			.then((v) => {
 				toast.success("selected billboards deleted Successfully!!");
 				onMerge?.();

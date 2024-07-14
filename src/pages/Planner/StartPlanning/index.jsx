@@ -29,6 +29,7 @@ import VideoDataFilters from "./VideoDataFilters";
 import {
 	getBudgetDetailsByBudgetIdAPI,
 	finishPlanAPI,
+	updateAssignedBudgetImage,
 } from "../../../apis/briefs.apis";
 
 import { addAssetsToPlan } from "../../../apis/plans.apis";
@@ -69,6 +70,7 @@ const StartPlanning = () => {
 	const [isPlanListOpen, setIsPlanListOpen] = useState(false);
 	const [mediaFilterOpen, setmediaFilterOpen] = useState(false);
 	const [videoDataFilterOpen, setvideoDataFilterOpen] = useState(false);
+	const [selectedMapImage, setselectedMapImage] = useState("");
 
 	const [mediaData, setMediaData] = useState([]);
 
@@ -230,6 +232,27 @@ const StartPlanning = () => {
 		}
 	};
 
+	const handleMapSsSave = async (e) => {
+		e.preventDefault();
+		try {
+			setisLoaderOpen(true);
+
+			const file = e.currentTarget.map_img.files[0];
+
+			const fd = new FormData();
+
+			fd.append("map_img", file);
+
+			await updateAssignedBudgetImage(budget_id, fd);
+
+			toast.success("Map Snapshot saved!");
+		} catch (error) {
+			APIerrorMessageHandler(error);
+		} finally {
+			setisLoaderOpen(false);
+		}
+	};
+
 	const totalAmount = data.plans ? getTotal(data.plans, "total_cost") : 0;
 	const totalCostForDuration = data.plans
 		? getTotal(data.plans, "cost_for_duration")
@@ -251,7 +274,7 @@ const StartPlanning = () => {
 		? getTotal(data.plans, "rental_per_month")
 		: 0;
 
-	const totalUnits = data.plans ? data.plans.length : 0
+	const totalUnits = data.plans ? data.plans.length : 0;
 
 	return (
 		<SuperAdminLayout activeLink={"/"}>
@@ -348,6 +371,39 @@ const StartPlanning = () => {
 						disabled={!mediaData.length}>
 						Add Bulk
 					</CustomButton>
+
+					<form onSubmit={handleMapSsSave}>
+						<label
+							for="map_image_input"
+							style={{ border: "1px dotted red", padding: "0.5rem" }}>
+							{selectedMapImage
+								? selectedMapImage
+								: data?.budget?.plan_ss
+								? data?.budget?.plan_ss
+								: "click here to add Map Snapshot"}
+							<input
+								name="map_img"
+								type="file"
+								id="map_image_input"
+								required
+								size="small"
+								style={{ height: 2, width: 2 }}
+								onChange={(e) => {
+									setselectedMapImage(e.target.value);
+								}}
+								accept="image/png, image/jpeg"
+							/>
+						</label>
+
+						<CustomButton
+							size="medium"
+							variant="contained"
+							type="submit"
+							disableElevation
+							sx={{ bgcolor: "green", color: "white" }}>
+							Save Map Image
+						</CustomButton>
+					</form>
 				</Stack>
 			</Box>
 			<Grid mt={2} spacing={2} container>

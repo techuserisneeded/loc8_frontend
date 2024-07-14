@@ -212,3 +212,14 @@ export async function downloadPlan(brief_id) {
 
 	window.URL.revokeObjectURL(url);
 }
+
+export async function updateAssignedBudgetImage(budget_id, fd) {
+	const token = loginUtils.getUser().token;
+
+	await axios.put("/briefs/assigned-budget/" + budget_id + "/image", fd, {
+		headers: {
+			Authorization: token,
+			"Content-Type": "multipart/form-data",
+		},
+	});
+}
