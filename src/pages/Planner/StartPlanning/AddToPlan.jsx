@@ -189,7 +189,7 @@ export default function AddToPlan({
 
 		addPlanAPI(fd)
 			.then((res) => {
-				toast.success("Plan saved!");
+				toast.success("ormation Added!");
 				setformState({});
 				handleClose();
 			})

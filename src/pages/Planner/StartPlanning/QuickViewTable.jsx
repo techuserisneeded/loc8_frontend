@@ -25,11 +25,11 @@ const QuickViewTable = ({ rows = [], onRemovedPlan }) => {
 	const [isLoading, setisLoading] = useState(false);
 
 	const handleDeletePlan = (plan_id) => {
-		if (!window.confirm("Are you sure you want to delete?")) {
-			return;
-		}
+		// if (!window.confirm("Are you sure you want to delete?")) {
+		// 	return;
+		// }
 
-		setisLoading(true);
+		// setisLoading(true);
 
 		deletePlanById(plan_id)
 			.then((v) => {

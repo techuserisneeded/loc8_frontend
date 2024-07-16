@@ -189,7 +189,7 @@ export default function AddToPlan({
 
 		addAssetInfoAPI(assetId, fd)
 			.then((res) => {
-				toast.success("Plan saved!");
+				toast.success("Asset Information Added!");
 				setformState({});
 				handleClose();
 			})
@@ -263,7 +263,7 @@ export default function AddToPlan({
 						<CloseIcon />
 					</IconButton>
 					<Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-						Add To Plan
+					  Add Asset Information
 					</Typography>
 				</Toolbar>
 			</AppBar>

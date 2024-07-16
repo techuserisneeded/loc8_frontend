@@ -254,6 +254,8 @@ function AssetPopUp({
 	onRemovePlan,
 	onAddToPlan,
 }) {
+
+	console.log(info);
 	return (
 		<ModalContainer onClose={onClose} width={"md"} open={isOpen}>
 			<Grid spacing={2} container>
@@ -269,9 +271,14 @@ function AssetPopUp({
 							/>
 							<LabelValue label={"Vendor"} value={info.vendor_name} />
 							<LabelValue label={"Illumination"} value={info.illumination} />
+
+							<LabelValue label={"Rank Net Saliency Location"} value={info.rank_net_saliency_locationwise} />
+							<LabelValue label={"Rank Net Saliency City"} value={info.Rank_net_saliency_citywise} />
+							<LabelValue label={"Visibility Duration"} value={info.visibility_duration} />
+							<LabelValue label={"Efficiency"} value={info.efficiency} />
 						</Grid>
 						<Grid md={6} item>
-							<Stack gap={2}>
+							<Stack >
 								<Stack justifyContent={"space-between"} direction={"row"}>
 									<LabelValue label={"Width"} value={info.width} />
 									<LabelValue label={"Height"} value={info.height} />
@@ -295,8 +302,17 @@ function AssetPopUp({
 
 								<LabelValue label={"Location"} value={info.location} />
 
-								<LabelValue label={"Total"} value={info.total_cost} />
+								<LabelValue label={"Size"} value={info.width * info.height * info.quantity} />
+								<LabelValue label={"Rental Per Month"} value={info.rental_per_month} />
+								<LabelValue label={"Duration"} value={info.duration} />
+								<LabelValue label={"Total Cost"} value={info.total_cost} />
+
+								
+
 							</Stack>
+
+
+							
 						</Grid>
 					</>
 				) : null}
