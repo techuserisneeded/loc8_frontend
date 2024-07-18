@@ -45,6 +45,7 @@ const VideoData = ({ disableMerge }) => {
 						data={data.billboards}
 						onMerge={handleMerge}
 						disableMerge={disableMerge}
+						onAddAssetInfo={()=>null}
 					/>
 
 					<Typography my={2} variant="h6" mb={1}>

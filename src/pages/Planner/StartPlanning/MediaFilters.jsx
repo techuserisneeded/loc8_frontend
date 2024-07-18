@@ -54,10 +54,10 @@ const filterFields = [
 		label: "Display Cost Per Month Range",
 		keys: ["display_cost_per_month_min", "display_cost_per_month_max"],
 	},
-	{
-		label: "Total Cost Range",
-		keys: ["total_cost_min", "total_cost_max"],
-	},
+	// {
+	// 	label: "Total Cost Range",
+	// 	keys: ["total_cost_min", "total_cost_max"],
+	// },
 	{
 		label: "Visibility Duration",
 		keys: ["visibility_duration_min", "visibility_duration_max"],
@@ -66,30 +66,30 @@ const filterFields = [
 		label: "Average Speed Range",
 		keys: ["average_speed_min", "average_speed_max"],
 	},
-	{
-		label: "Front Saliency Score City",
-		keys: ["front_saliency_score_city_min", "front_saliency_score_city_max"],
-	},
-	{
-		label: "Rear Saliency Score City",
-		keys: ["rear_saliency_score_city_min", "rear_saliency_score_city_max"],
-	},
-	{
-		label: "Net Saliency Score City",
-		keys: ["net_saliency_score_city_min", "net_saliency_score_city_max"],
-	},
-	{
-		label: "Impressions",
-		keys: ["impressions_min", "impressions_max"],
-	},
-	{
-		label: "Effective Impressions",
-		keys: ["effective_impressions_min", "effective_impressions_max"],
-	},
-	{
-		label: "Efficiency",
-		keys: ["efficiency_min", "efficiency_max"],
-	},
+	// {
+	// 	label: "Front Saliency Score City",
+	// 	keys: ["front_saliency_score_city_min", "front_saliency_score_city_max"],
+	// },
+	// {
+	// 	label: "Rear Saliency Score City",
+	// 	keys: ["rear_saliency_score_city_min", "rear_saliency_score_city_max"],
+	// },
+	// {
+	// 	label: "Net Saliency Score City",
+	// 	keys: ["net_saliency_score_city_min", "net_saliency_score_city_max"],
+	// },
+	// {
+	// 	label: "Impressions",
+	// 	keys: ["impressions_min", "impressions_max"],
+	// },
+	// {
+	// 	label: "Effective Impressions",
+	// 	keys: ["effective_impressions_min", "effective_impressions_max"],
+	// },
+	// {
+	// 	label: "Efficiency",
+	// 	keys: ["efficiency_min", "efficiency_max"],
+	// },
 	{
 		label: "Top Area",
 		keys: ["top_area"],
@@ -98,10 +98,10 @@ const filterFields = [
 		label: "Top Display Cost Per Month",
 		keys: ["top_display_cost_per_month"],
 	},
-	{
-		label: "Top Total Cost",
-		keys: ["top_total_cost"],
-	},
+	// {
+	// 	label: "Top Total Cost",
+	// 	keys: ["top_total_cost"],
+	// },
 	{
 		label: "Top Visibility Duration",
 		keys: ["top_visibility_duration"],
@@ -278,6 +278,7 @@ const MediaFilters = ({
 									<Typography>{v.label}</Typography>
 									<Stack alignItems={"center"} direction={"row"}>
 										<DebouncedInput
+										    debounce = {3}
 											type={input_type}
 											placeholder={
 												input_type === "text" ? "Search here..." : "Min"
@@ -288,6 +289,7 @@ const MediaFilters = ({
 
 										{maxKey ? (
 											<DebouncedInput
+											    debounce = {3}
 												type={input_type}
 												placeholder="Max"
 												value={filters[maxKey]}
