@@ -42,6 +42,7 @@ export default function AddToPlan({
 	assetId,
 	initialCoords = [],
 	row = {},
+	clearAfterSubmit = true,
 }) {
 	const [formState, setformState] = React.useState(row);
 	const [isLoading, setisLoading] = React.useState(false);
@@ -190,7 +191,11 @@ export default function AddToPlan({
 		addAssetInfoAPI(assetId, fd)
 			.then((res) => {
 				toast.success("Plan saved!");
-				setformState({});
+
+				if (clearAfterSubmit) {
+					setformState({});
+				}
+
 				handleClose();
 			})
 			.catch((e) => {
@@ -202,33 +207,30 @@ export default function AddToPlan({
 			});
 	};
 
-	React.useEffect(() => {
-		if (coords.lat && coords.long) {
-			setisLoading(true);
-			axios
-				.get("https://nominatim.openstreetmap.org/reverse", {
-					params: {
-						lat: coords.lat,
-						lon: coords.long,
-					},
-				})
-				.then((response) => {
-					const xmlData = response.data;
-					const parser = new DOMParser();
-					const xml = parser.parseFromString(xmlData, "text/xml");
+	const handleSetPosition = (coords = {}) => {
+		setcoords(coords);
 
-					setLocationText(xml.querySelector("result").textContent);
-				})
-				.finally((v) => {
-					setisLoading(false);
-				});
-		}
-	}, [coords.lat, coords.long]);
+		setisLoading(true);
+		axios
+			.get("https://nominatim.openstreetmap.org/reverse", {
+				params: {
+					lat: coords.lat,
+					lon: coords.long,
+				},
+			})
+			.then((response) => {
+				const xmlData = response.data;
+				const parser = new DOMParser();
+				const xml = parser.parseFromString(xmlData, "text/xml");
+
+				setLocationText(xml.querySelector("result").textContent);
+			})
+			.finally((v) => {
+				setisLoading(false);
+			});
+	};
 
 	React.useEffect(() => {
-		// if (row) {
-		// 	setformState(row);
-		// }
 		if (row.location) {
 			setLocationText(row.location);
 		}
@@ -344,7 +346,10 @@ export default function AddToPlan({
 											}}
 											positions={initialCoords}
 										/>
-										<LocationPicker position={coords} setPosition={setcoords} />
+										<LocationPicker
+											position={coords}
+											setPosition={handleSetPosition}
+										/>
 									</MapContainer>
 								) : null}
 							</Grid>
