@@ -145,7 +145,7 @@ const columns = [
 		header: "Visibility Duration",
 	}),
 
-	columnHelper.accessor("focal_vision_duration", {
+	columnHelper.accessor("central_duration", {
 		header: "Focal Vision Duration",
 	}),
 
@@ -520,7 +520,7 @@ const Videos = () => {
 		latitude: false,
 		longitude: false,
 		created_at: true,
-		focal_vision_duration: false,
+		central_duration: false,
 		average_speed: true,
 		length_of_stretch: true,
 		vendor_name: true,

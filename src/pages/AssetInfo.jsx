@@ -50,7 +50,6 @@ const AssetInfo = () => {
 			onClose={handleAssetClose}
 			initialCoords={coords}
 			row={row}
-			clearAfterSubmit={false}
 		/>
 	);
 };

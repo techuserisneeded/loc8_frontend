@@ -128,7 +128,7 @@ const filterFields = [
 	},
 	{
 		label: "Top Net Saliency Location",
-		keys: ["top_net_saliency_location"],
+		keys: ["top_net_saliency_locationwise"],
 	},
 	{
 		label: "Top Impressions",
