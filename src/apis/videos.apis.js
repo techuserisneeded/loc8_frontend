@@ -14,6 +14,21 @@ export async function addVideosAPI(fd) {
 	return data;
 }
 
+export async function abortVideosAPI(room_id) {
+	const token = loginUtils.getUser().token;
+
+	const fd = new FormData();
+	fd.append("room_id", room_id);
+
+	const { data } = await axios.post("videos/upload/abort", fd, {
+		headers: {
+			Authorization: token,
+		},
+	});
+
+	return data;
+}
+
 export async function deleteVideosAPI(video_id) {
 	const token = loginUtils.getUser().token;
 

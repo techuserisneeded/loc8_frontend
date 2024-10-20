@@ -139,10 +139,10 @@ export default function AddVideo() {
 				setprogressState({ progress: -1 });
 				navigate("/add-video/" + video_id + "/processed-output");
 			})
-			.catch((v) => {
-				console.log(v);
+			.catch((e) => {
+				const msg = e?.response?.data?.message || "Something went wrong!";
 				setprogressState({ progress: -1 });
-				toast.error("Something went wrong!");
+				toast.error(msg);
 			})
 			.finally(() => {
 				setisUploading(false);
@@ -245,11 +245,14 @@ export default function AddVideo() {
 						</Button>
 					</Box>
 				</Box>
-				<UploadProgress
-					isLoading={isUploading}
-					progress={progressState.progress}
-					message={progressState.message}
-				/>
+				{isUploading ? (
+					<UploadProgress
+						isLoading={isUploading}
+						progress={progressState.progress}
+						message={progressState.message}
+						roomId={roomId}
+					/>
+				) : null}
 			</Container>
 		</SuperAdminLayout>
 	);

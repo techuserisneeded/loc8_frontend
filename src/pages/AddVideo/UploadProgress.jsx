@@ -1,19 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
+import { Button } from "@mui/material";
+
+import { abortVideosAPI } from "../../apis/videos.apis";
 
 export default function UploadProgress({
 	isLoading,
 	onClose,
 	progress,
 	message,
+	roomId,
 }) {
+	const [isRequestin, setIsRequestin] = useState(false);
+	const [isAbortRequested, setisAbortRequested] = useState(false);
+
 	const handleClose = () => {
 		onClose?.();
+	};
+
+	const handleAbortVideo = async () => {
+		try {
+			setIsRequestin(true);
+			await abortVideosAPI(roomId);
+			setisAbortRequested(true);
+		} catch (error) {
+			alert("unable send abort request!");
+		} finally {
+			setIsRequestin(false);
+		}
 	};
 
 	return (
@@ -66,6 +85,21 @@ export default function UploadProgress({
 								width={100}
 							/>
 						</Box>
+						{isAbortRequested ? (
+							<Typography>
+								Abort has been requested, This video processing will be aborted
+								after all the clean ups.
+							</Typography>
+						) : (
+							<Button
+								variant="contained"
+								sx={{ bgcolor: "red", color: "white" }}
+								disableElevation
+								onClick={handleAbortVideo}
+								disabled={isAbortRequested}>
+								{isRequestin ? "requesting..." : "Request Abort"}
+							</Button>
+						)}
 					</center>
 				</DialogContentText>
 			</DialogContent>
