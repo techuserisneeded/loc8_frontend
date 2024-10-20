@@ -263,7 +263,7 @@ export default function AddToPlan({
 						<CloseIcon />
 					</IconButton>
 					<Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-					  Add Asset Information
+					  Add Asset Information - {formState.filename} -- {formState.tracker_id}
 					</Typography>
 				</Toolbar>
 			</AppBar>

@@ -194,7 +194,7 @@ const PlannerList = () => {
 			last_name: cleanString(formState.last_name),
 			emp_id: cleanString(formState.emp_id),
 			email: cleanString(formState.email),
-			password: cleanString(formState.password),
+			password: formState.password,
 			role_id: 1,
 		};
 
@@ -295,7 +295,6 @@ const PlannerList = () => {
 			id: user.id,
 		});
 	};
-
 	return (
 		<SuperAdminLayout activeLink="/planners">
 			{fetchingPlanners ? (
@@ -345,13 +344,13 @@ const PlannerList = () => {
 										<TableCell>{row.last_name}</TableCell>
 										<TableCell>{row.email}</TableCell>
 										<TableCell>
-											{row.user_areas.map((v) => v.zone_name)}
+											{row.user_areas.map((v) => v.zone_name).join(', ')}
 										</TableCell>
 										<TableCell>
-											{row.user_areas.map((v) => v.state_name)}
+											{row.user_areas.map((v) => v.state_name).join(', ')}
 										</TableCell>
 										<TableCell>
-											{row.user_areas.map((v) => v.city_name)}
+											{row.user_areas.map((v) => v.city_name).join(', ')}
 										</TableCell>
 										<TableCell>
 											{new Date(row.created_at).toISOString().split("T")[0]}
@@ -402,7 +401,7 @@ const PlannerList = () => {
 											</Button>
 										</TableCell>
 									</TableRow>
-							  ))
+															))
 							: null}
 					</TableBody>
 				</Table>
@@ -568,7 +567,7 @@ const PlannerList = () => {
 					</DialogActions>
 				</form>
 			</Dialog>
-		</SuperAdminLayout>
+		</SuperAdminLayout>	
 	);
 };
 

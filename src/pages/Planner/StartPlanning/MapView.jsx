@@ -275,7 +275,9 @@ function AssetPopUp({
 							<LabelValue label={"Rank Net Saliency Location"} value={info.rank_net_saliency_locationwise} />
 							<LabelValue label={"Rank Net Saliency City"} value={info.Rank_net_saliency_citywise} />
 							<LabelValue label={"Visibility Duration"} value={info.visibility_duration} />
-							<LabelValue label={"Efficiency"} value={info.efficiency} />
+							<LabelValue label={"Rank Efficiency"} value={info.rank_efficiency}/>
+							<LabelValue label={"Impressions (in Millions)"} value={(info.impression/1000000).toFixed(2)} />
+							<LabelValue label={"Tracker ID"} value={info.tracker_id} />
 						</Grid>
 						<Grid md={6} item>
 							<Stack >
@@ -298,6 +300,7 @@ function AssetPopUp({
 										label={"Mounting Cost"}
 										value={info.mounting_cost}
 									/>
+
 								</Stack>
 
 								<LabelValue label={"Location"} value={info.location} />
@@ -306,6 +309,8 @@ function AssetPopUp({
 								<LabelValue label={"Rental Per Month"} value={info.rental_per_month} />
 								<LabelValue label={"Duration"} value={info.duration} />
 								<LabelValue label={"Total Cost"} value={info.total_cost} />
+								<LabelValue label={"Rank Effective Impression"} value={info.rank_effective_impression} />
+								<LabelValue label={"Traffic"} value={info.traffic_direction} />
 
 								
 
