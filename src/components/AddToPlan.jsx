@@ -203,7 +203,7 @@ export default function AddToPlan({
 	};
 
 	React.useEffect(() => {
-		if (coords.lat && coords.long) {
+		if (coords.lat && coords.long && !row.location) {
 			setisLoading(true);
 			axios
 				.get("https://nominatim.openstreetmap.org/reverse", {
@@ -223,7 +223,7 @@ export default function AddToPlan({
 					setisLoading(false);
 				});
 		}
-	}, [coords.lat, coords.long]);
+	}, [coords.lat, coords.long, row.location]);
 
 	React.useEffect(() => {
 		// if (row) {
@@ -263,7 +263,8 @@ export default function AddToPlan({
 						<CloseIcon />
 					</IconButton>
 					<Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-					  Add Asset Information - {formState.filename} -- {formState.tracker_id}
+						Add Asset Information - {formState.filename} --{" "}
+						{formState.tracker_id}
 					</Typography>
 				</Toolbar>
 			</AppBar>
