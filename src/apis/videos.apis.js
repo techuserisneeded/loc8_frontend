@@ -1,7 +1,9 @@
 import axios from "../libs/axios.lib";
 import * as loginUtils from "../utils/login.utils";
 
-export async function addVideosAPI(fd) {
+export async function addVideosAPI(fd, overwrite = 0) {
+	fd.set("overwrite", overwrite);
+
 	const token = loginUtils.getUser().token;
 
 	const { data } = await axios.post("videos/upload", fd, {

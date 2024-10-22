@@ -30,8 +30,6 @@ const defaultCityOptions = [{ value: 0, label: "Please Select State" }];
 
 const roomId = helpers.generateRandomUniqueString();
 
-console.log({ roomId });
-
 export default function AddVideo() {
 	const [isUploading, setisUploading] = useState(false);
 	const [selectedData, setselectedData] = useState({
@@ -40,8 +38,6 @@ export default function AddVideo() {
 		city_id: null,
 		file: null,
 	});
-
-	// const [roomId, setroomId] = useState("");
 
 	const [progressState, setprogressState] = useState({
 		message: "Uploading Video..",
@@ -121,32 +117,45 @@ export default function AddVideo() {
 			return;
 		}
 
-		// const rId = helpers.generateRandomUniqueString();
-
 		data.append("video", selectedData.file);
 		data.append("zone_id", selectedData.zone_id);
 		data.append("state_id", selectedData.state_id);
 		data.append("city_id", selectedData.city_id);
 		data.append("room_id", roomId);
 
-		setisUploading(true);
+		const uploadVideo = async (overwrite = 0) => {
+			try {
+				setisUploading(true);
+				const resp = await addVideosAPI(data, overwrite);
 
-		addVideosAPI(data)
-			.then((resp) => {
 				const video_id = resp.video_details.video_id;
-
-				toast.success("video uploaded successfully!");
+				toast.success("Video uploaded successfully!");
 				setprogressState({ progress: -1 });
-				navigate("/add-video/" + video_id + "/processed-output");
-			})
-			.catch((e) => {
+				navigate(`/add-video/${video_id}/processed-output`);
+			} catch (e) {
 				const msg = e?.response?.data?.message || "Something went wrong!";
+				const statusCode = e?.response?.status;
+
+				if (statusCode === 409) {
+					const doOverwrite = window.confirm(
+						"File for the city already exists! Would you like to overwrite?"
+					);
+
+					return doOverwrite;
+				}
+
 				setprogressState({ progress: -1 });
 				toast.error(msg);
-			})
-			.finally(() => {
+			} finally {
 				setisUploading(false);
-			});
+			}
+		};
+
+		uploadVideo().then((doOverwrite) => {
+			if (doOverwrite) {
+				return uploadVideo(1);
+			}
+		});
 	};
 
 	useEffect(() => {
